@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Registro de invitados · Fiesta de fin de año RAN</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style id="app-css">
+:root{
+  --guinda:#691C32; --guinda2:#9D2449; --dorado:#BC955C; --dorado-l:#F5EEE2;
+  --bg:#F6F4F1; --card:#fff; --ink:#1E1915; --muted:#6A615A; --line:#E4DDD3;
+  --ok:#17784A; --ok-l:#E2F3EA; --warn:#9A6212; --warn-l:#FCF1DE; --bad:#B42318; --bad-l:#FDECEA;
+  --r:14px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:'Noto Sans',system-ui,-apple-system,'Segoe UI',sans-serif;font-size:16px;line-height:1.4}
+h1,h2,h3,.mont{font-family:Montserrat,system-ui,sans-serif}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+[hidden]{display:none!important}
+
+/* ---------- Header ---------- */
+.top{background:var(--guinda);color:#fff;padding:14px 20px 0;position:sticky;top:0;z-index:20;box-shadow:0 2px 10px rgba(0,0,0,.12)}
+.top-row{display:flex;align-items:center;gap:16px;flex-wrap:wrap;max-width:1180px;margin:0 auto}
+.brand{flex:1;min-width:220px}
+.brand small{display:block;font-family:Montserrat,sans-serif;font-weight:600;letter-spacing:.08em;text-transform:uppercase;font-size:11px;color:var(--dorado)}
+.brand h1{margin:2px 0 0;font-size:20px;font-weight:700;line-height:1.2}
+.counter{display:flex;align-items:baseline;gap:6px;font-family:Montserrat,sans-serif}
+.counter b{font-size:30px;font-weight:800}
+.counter span{opacity:.85;font-size:14px}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:5px 10px;border-radius:99px;background:rgba(255,255,255,.12);white-space:nowrap}
+.pill i{width:8px;height:8px;border-radius:50%;background:#bbb;display:inline-block}
+.pill.ok i{background:#5BD08F}.pill.warn i{background:#F4B740}.pill.bad i{background:#FF7A6E}
+.tabs{display:flex;gap:4px;max-width:1180px;margin:12px auto 0;overflow-x:auto}
+.tab{background:transparent;border:0;color:rgba(255,255,255,.75);padding:10px 16px;border-radius:10px 10px 0 0;font-family:Montserrat,sans-serif;font-weight:600;font-size:14px;white-space:nowrap}
+.tab[aria-selected="true"]{background:var(--bg);color:var(--guinda)}
+main{max-width:1180px;margin:0 auto;padding:22px 20px 80px}
+
+/* ---------- Generic ---------- */
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px}
+.btn{border:1px solid var(--line);background:#fff;border-radius:10px;padding:9px 14px;font-weight:600;font-size:14px;display:inline-flex;align-items:center;gap:6px;justify-content:center}
+.btn:hover{border-color:#cfc6ba}
+.btn.primary{background:var(--guinda2);border-color:var(--guinda2);color:#fff}
+.btn.primary:hover{background:var(--guinda)}
+.btn.ok{background:var(--ok);border-color:var(--ok);color:#fff}
+.btn.ghost{background:transparent}
+.btn.danger{color:var(--bad);border-color:#F1C4BF}
+.btn.armed{background:var(--bad);border-color:var(--bad);color:#fff}
+.btn.big{padding:14px 22px;font-size:17px;border-radius:12px}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.field{display:flex;flex-direction:column;gap:5px;font-size:13px;color:var(--muted);font-weight:600}
+.inp{border:1px solid var(--line);border-radius:10px;padding:9px 11px;background:#fff;font-size:15px;color:var(--ink);font-weight:400;min-width:0}
+.inp:focus,.rc-q:focus{outline:3px solid rgba(157,36,73,.18);border-color:var(--guinda2)}
+.muted{color:var(--muted)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}
+.tag{display:inline-block;font-size:12px;padding:2px 8px;border-radius:99px;background:var(--dorado-l);color:#6E5326;font-weight:600}
+.tag.warn{background:var(--warn-l);color:var(--warn)}
+.tag.bad{background:var(--bad-l);color:var(--bad)}
+.tag.ok{background:var(--ok-l);color:var(--ok)}
+h2.sec{font-size:17px;margin:0 0 4px}
+p.sec-d{margin:0 0 14px;color:var(--muted);font-size:14px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media (max-width:860px){.grid2{grid-template-columns:1fr}}
+.stack{display:flex;flex-direction:column;gap:18px}
+
+/* ---------- Reception ---------- */
+.rc{max-width:860px;margin:0 auto}
+.rc-search{position:relative}
+.rc-q{width:100%;font-size:26px;padding:18px 56px 18px 20px;border:2px solid var(--line);border-radius:16px;background:#fff;font-family:Montserrat,sans-serif;font-weight:600}
+.rc-clear{position:absolute;right:12px;top:50%;transform:translateY(-50%);border:0;background:#EEE9E2;width:36px;height:36px;border-radius:50%;font-size:20px;color:var(--muted)}
+.rc-hint{font-size:13px;color:var(--muted);margin:8px 4px 16px}
+.rc-banner{background:var(--ok);color:#fff;border-radius:16px;padding:16px 20px;margin-bottom:14px;display:flex;align-items:center;gap:16px;animation:pop .25s ease}
+.rc-banner .who{flex:1;font-size:18px}
+.rc-banner .who small{display:block;opacity:.85;font-size:13px}
+.rc-banner .mesa{font-family:Montserrat,sans-serif;text-align:center;line-height:1}
+.rc-banner .mesa span{font-size:12px;letter-spacing:.1em;text-transform:uppercase;opacity:.85}
+.rc-banner .mesa b{display:block;font-size:46px;font-weight:800}
+@keyframes pop{from{transform:scale(.97);opacity:.4}to{transform:none;opacity:1}}
+.rc-results{display:flex;flex-direction:column;gap:10px}
+.rc-label{font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin:6px 4px 0}
+.res{display:flex;align-items:center;gap:16px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px 16px}
+.res.is-in{background:#FBFAF8}
+.res-main{flex:1;min-width:0}
+.res-name{font-family:Montserrat,sans-serif;font-weight:700;font-size:21px}
+.res-meta{font-size:14px;color:var(--muted);margin-top:2px}
+.res-in{font-size:14px;color:var(--ok);font-weight:600;margin-top:4px}
+.res-mesa{text-align:center;min-width:84px;font-family:Montserrat,sans-serif;line-height:1;padding:8px 6px;border-radius:12px;background:var(--dorado-l);color:var(--guinda)}
+.res-mesa span{font-size:11px;text-transform:uppercase;letter-spacing:.1em;font-weight:700;color:#8A6A35}
+.res-mesa b{display:block;font-size:38px;font-weight:800;margin-top:2px}
+.res-mesa.none b{font-size:22px;color:var(--muted)}
+.res-act{display:flex;flex-direction:column;gap:6px}
+@media (max-width:600px){
+  .res{flex-wrap:wrap}
+  .res-main{flex-basis:calc(100% - 110px)}
+  .res-act{flex-basis:100%}
+  .res-act .btn{width:100%}
+  .rc-q{font-size:21px}
+}
+.empty{padding:36px 20px;text-align:center;color:var(--muted)}
+.empty b{display:block;font-family:Montserrat,sans-serif;color:var(--ink);font-size:18px;margin-bottom:4px}
+.walk{border:1px dashed #CDBFAE;border-radius:16px;padding:16px;background:#FFFCF7}
+.walk h3{margin:0 0 10px;font-size:16px}
+.walk .row .field{flex:1;min-width:140px}
+.walk .row .field.sm{flex:0 0 110px;min-width:90px}
+
+/* ---------- Tables view ---------- */
+.mesas{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
+.mesa-c{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px;text-align:left;display:flex;flex-direction:column;gap:8px}
+.mesa-c.over{border-color:var(--bad);box-shadow:0 0 0 2px var(--bad-l)}
+.mesa-c.open{grid-column:1/-1}
+.mesa-h{display:flex;align-items:baseline;gap:8px}
+.mesa-h b{font-family:Montserrat,sans-serif;font-size:20px;font-weight:800;color:var(--guinda)}
+.mesa-h span{margin-left:auto;font-size:13px;color:var(--muted)}
+.bar{height:6px;background:#EFEAE3;border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--ok)}
+.mesa-tags{display:flex;gap:4px;flex-wrap:wrap}
+.mesa-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:6px;margin-top:6px}
+.mini{display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid var(--line);border-radius:10px;font-size:14px}
+.mini .nm{flex:1}
+.mini .nm small{display:block;color:var(--muted);font-size:12px}
+.chk{width:30px;height:30px;border-radius:8px;border:1.5px solid #CFC6BA;background:#fff;font-weight:700;color:#fff;flex:none}
+.chk.on{background:var(--ok);border-color:var(--ok)}
+.toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
+.stats{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.stat{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 14px;min-width:120px}
+.stat b{display:block;font-family:Montserrat,sans-serif;font-size:24px}
+.stat span{font-size:12px;color:var(--muted)}
+
+/* ---------- Prepare ---------- */
+textarea.inp{width:100%;min-height:210px;resize:vertical;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14px}
+.pv{max-height:380px;overflow:auto;border:1px solid var(--line);border-radius:10px;margin-top:12px}
+table.t{width:100%;border-collapse:collapse;font-size:14px}
+table.t th{position:sticky;top:0;background:#FAF8F5;text-align:left;font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);padding:8px 10px;border-bottom:1px solid var(--line);z-index:1}
+table.t td{padding:6px 10px;border-bottom:1px solid #F0EBE4;vertical-align:middle}
+table.t tr.off td{opacity:.5}
+table.t .inp{padding:6px 8px;font-size:14px;width:100%}
+table.t .inp.n{width:72px}
+.list-wrap{max-height:560px;overflow:auto;border:1px solid var(--line);border-radius:10px}
+.danger-z{border-color:#F1C4BF}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:#2A221D;color:#fff;padding:12px 18px;border-radius:12px;font-size:14px;z-index:50;max-width:min(560px,92vw);box-shadow:0 8px 24px rgba(0,0,0,.2)}
+.howto{font-size:14px;color:var(--muted);margin:0;padding-left:18px}
+.howto li{margin:4px 0}
+.copybox{width:100%;min-height:120px;margin-top:10px}
+
+/* ---------- Offline kit ---------- */
+body.kit .top{padding-bottom:14px}
+body.setup .tabs{visibility:hidden}
+@media (max-width:600px){
+  .top{padding:10px 14px 0}
+  .brand{min-width:0;flex-basis:100%}
+  .brand small{display:none}
+  .brand h1{font-size:17px}
+  .top-row{gap:6px 12px}
+  .counter b{font-size:24px}
+  .tabs{margin-top:8px}
+  .tab{padding:8px 14px}
+  main{padding:16px 14px 60px}
+  .rc-hint{font-size:12px}
+}
+.kit-foot{max-width:860px;margin:28px auto 0;display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;font-size:14px}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-row">
+    <div class="brand">
+      <small>Registro Agrario Nacional · Registro de invitados</small>
+      <h1 id="hTitle">Fiesta de fin de año</h1>
+    </div>
+    <div class="counter"><b id="hIn">0</b><span>de <span id="hTot">0</span> han llegado</span></div>
+    <span class="pill" id="hStatus"><i></i><span>Conectando…</span></span>
+  </div>
+  <nav class="tabs" role="tablist">
+    <button class="tab" role="tab" data-tab="recepcion" aria-selected="true">Recepción</button>
+    <button class="tab" role="tab" data-tab="mesas" aria-selected="false">Mesas</button>
+    <button class="tab" role="tab" data-tab="preparar" aria-selected="false">Preparar lista</button>
+  </nav>
+</header>
+
+<main>
+  <section id="v-conectar" hidden>
+    <div class="card" style="max-width:520px;margin:24px auto">
+      <h2 class="sec">Conectar con la lista de invitados</h2>
+      <p class="sec-d">Escribe la clave que te dieron. Si abriste el link de la puerta, esto no debería aparecer.</p>
+      <form id="cForm" class="stack" style="gap:12px">
+        <label class="field" id="cUrlWrap">URL del Apps Script (termina en /exec)
+          <input class="inp" id="cUrl" placeholder="https://script.google.com/macros/s/…/exec" autocomplete="off">
+        </label>
+        <label class="field">Clave
+          <input class="inp" id="cKey" type="password" autocomplete="current-password">
+        </label>
+        <div class="row"><button class="btn primary" type="submit">Conectar</button><button class="btn ghost" type="button" id="cLocal">Usar sin conexión (solo este dispositivo)</button></div>
+        <p id="cMsg" class="muted" style="margin:0;font-size:14px"></p>
+      </form>
+    </div>
+  </section>
+
+  <section id="v-recepcion"></section>
+
+  <section id="v-mesas" hidden>
+    <div class="stats" id="mStats"></div>
+    <div class="toolbar">
+      <input class="inp" id="mFilter" placeholder="Filtrar por área o nombre…" style="flex:1;min-width:200px">
+      <label class="muted" style="font-size:14px;display:flex;gap:6px;align-items:center"><input type="checkbox" id="mOnlyPending"> Solo mesas con pendientes</label>
+    </div>
+    <div class="mesas" id="mGrid"></div>
+  </section>
+
+  <section id="v-preparar" hidden>
+    <div class="stack">
+      <div class="grid2">
+        <div class="card">
+          <h2 class="sec">1 · Pega las listas tal como te llegan</h2>
+          <p class="sec-d">Una persona por renglón. Un renglón como <b>“Del AGA:”</b> marca el área de los nombres que siguen. También puedes pegar columnas desde Excel (nombre, área, mesa). Se corrigen mayúsculas y acentos comunes, y se detectan duplicados.</p>
+          <textarea class="inp" id="pText" placeholder="Del AGA:&#10;Lupita QUintanilla&#10;Eduardo Arellano&#10;…&#10;&#10;De la Dirección de Catastro:&#10;…"></textarea>
+          <div class="row" style="margin-top:10px">
+            <label class="field" style="flex:1;min-width:160px">Área si la lista no la trae
+              <input class="inp" id="pArea" placeholder="Ej. Dirección Jurídica" list="areasList">
+            </label>
+            <label class="muted" style="font-size:14px;display:flex;gap:6px;align-items:center;padding-bottom:10px"><input type="checkbox" id="pAccents" checked> Poner acentos comunes</label>
+            <button class="btn primary" id="pReview">Revisar</button>
+          </div>
+          <div id="pPreview"></div>
+        </div>
+
+        <div class="stack">
+          <div class="card">
+            <h2 class="sec">2 · Asigna las mesas</h2>
+            <p class="sec-d">Automático: agrupa por área y llena mesas sin partir áreas pequeñas. Respeta las mesas que ya pusiste a mano.</p>
+            <div class="row">
+              <label class="field" style="flex:0 0 130px">Lugares por mesa
+                <input class="inp" id="aSeats" type="number" min="1" max="40" value="10">
+              </label>
+              <button class="btn primary" id="aAuto">Asignar a quienes no tienen mesa</button>
+            </div>
+            <div class="row" style="margin-top:14px">
+              <label class="field" style="flex:1;min-width:160px">Toda un área a una mesa
+                <select class="inp" id="aArea"></select>
+              </label>
+              <label class="field" style="flex:0 0 90px">Mesa
+                <input class="inp" id="aMesa" type="number" min="1">
+              </label>
+              <button class="btn" id="aAreaBtn">Asignar</button>
+            </div>
+            <div class="row" style="margin-top:14px">
+              <button class="btn danger" id="aClear" data-confirm="¿Quitar todas las mesas?">Quitar todas las mesas</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <h2 class="sec">3 · Prepara la entrada</h2>
+            <p class="sec-d">Cada tablet o celular abre esta misma página en la pestaña Recepción. Ponle nombre a este dispositivo para saber quién registró a quién.</p>
+            <div class="row">
+              <label class="field" style="flex:1;min-width:160px">Nombre de este dispositivo
+                <input class="inp" id="dName" placeholder="Ej. Puerta 1">
+              </label>
+              <label class="field" style="flex:1;min-width:160px">Nombre del evento
+                <input class="inp" id="eTitle" placeholder="Fiesta de fin de año">
+              </label>
+            </div>
+            <div class="row" style="margin-top:14px">
+              <button class="btn" id="xCsv">Descargar lista (CSV para Excel)</button>
+              <button class="btn" id="xKit">Descargar kit sin internet</button>
+            </div>
+            <p class="sec-d" style="margin:10px 0 0">El kit sin internet es un archivo .html con toda la lista adentro: se abre en cualquier celular o laptop, no necesita cuenta ni señal, y al final exporta quién llegó.</p>
+            <div id="xConn"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="row" style="justify-content:space-between;align-items:center;margin-bottom:12px">
+          <div>
+            <h2 class="sec">Lista completa <span class="muted" id="lCount" style="font-weight:500"></span></h2>
+            <p class="sec-d" style="margin:0">Corrige nombre, área o mesa directamente; se guarda al salir del campo.</p>
+          </div>
+          <div class="row">
+            <input class="inp" id="lFilter" placeholder="Buscar…" style="min-width:180px">
+            <select class="inp" id="lArea"></select>
+          </div>
+        </div>
+        <div class="list-wrap" id="lWrap"></div>
+      </div>
+
+      <div class="card danger-z">
+        <h2 class="sec">Zona de cuidado</h2>
+        <p class="sec-d">Úsalo para ensayos: deja la lista lista y borra las llegadas antes del evento.</p>
+        <div class="row">
+          <button class="btn danger" id="zArrivals" data-confirm="¿Borrar todas las llegadas?">Borrar registro de llegadas</button>
+          <button class="btn danger" id="zAll" data-confirm="¿Borrar TODA la lista?">Borrar toda la lista</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<datalist id="areasList"></datalist>
+<div class="toast" id="toast" hidden></div>
+
+<!-- ===================== CORE (shared with the offline kit) ===================== -->
+<script id="core-js">
+var NICK_GROUPS = [
+  ['guadalupe','lupita','lupe','lupis'],['jose','pepe','chepe'],['francisco','paco','pancho','kiko','quico'],
+  ['guillermo','memo'],['jesus','chucho','chuy'],['eduardo','lalo'],['ignacio','nacho'],
+  ['alberto','beto'],['roberto','beto'],['humberto','beto'],['antonio','tono','tonio'],['enrique','kike','quique'],
+  ['leticia','lety','leti'],['patricia','paty','pati'],['fernanda','fer'],['fernando','fer'],
+  ['alejandro','alex','ale'],['alejandra','ale','alex'],['rafael','rafa'],['gabriela','gaby','gabi'],
+  ['veronica','vero'],['carlos','charly','charlie'],['alfonso','poncho'],['salvador','chava'],
+  ['consuelo','chelo'],['concepcion','concha','conchita','conny'],['margarita','mago','magos'],['rosario','chayo'],
+  ['dolores','lola'],['mercedes','meche'],['refugio','cuco','cuca'],['ernesto','neto'],['gerardo','jerry'],
+  ['manuel','manolo'],['luis','wicho','lucho'],['daniel','dani'],['daniela','dani'],['jonathan','jona','jonatan','johnatan'],
+  ['elizabeth','eli','liz','lizbeth','lisbeth','lizbet'],['beatriz','bety','betty'],['isabel','chabela','isa'],
+  ['maria','mary','mari'],['ricardo','richard','richi'],['santiago','santi'],['sebastian','sebas'],['mauricio','mau'],
+  ['maximiliano','max'],['cristina','cris'],['cristian','cris','christian'],['gustavo','tavo'],['federico','fede'],
+  ['rodrigo','rodri'],['ivonne','ivon'],['yolanda','yola'],['josefina','chepina','fina'],['angelica','angie'],
+  ['adriana','adri'],['susana','susy'],['laura','lau'],['karina','kari','carina'],['katia','katy','kathia'],
+  ['jeovany','geovanni','giovanni','jovany','geovany','yovany'],['ivan','iban'],['oswaldo','osvaldo']
+];
+var NICK = {};
+NICK_GROUPS.forEach(function(g){ g.forEach(function(w){ (NICK[w] = NICK[w] || []).push(g[0]); }); });
+var PARTICLES = {de:1,del:1,la:1,las:1,los:1,y:1,e:1,da:1,van:1,von:1,di:1};
+var ACC = {};
+('López Martínez Ramírez Gutiérrez Hernández González Rodríguez Pérez Sánchez Gómez Díaz Jiménez Álvarez Méndez Domínguez '+
+ 'Vázquez Núñez Juárez Suárez Benítez Fernández Márquez Gálvez Chávez Ramos Velázquez Vélez Báez Cortés Muñoz Gámez Ibáñez Ordóñez '+
+ 'Valdés Estévez Andrés Ríos Ávila Ángeles Galván Durán Guzmán Beltrán Román Rincón León Calderón Monzón Colín Martín Cancino Pliego '+
+ 'José María Jesús Raúl Rubén Sebastián Julián Adrián Damián Germán Héctor Víctor Óscar Ángel Mónica Verónica Sofía Lucía Rocío '+
+ 'Inés Belén Ramón Simón Joaquín Fermín Efraín Nicolás Tomás Matías Elías Isaías Iván Fabián Cristián Rogelio Abigaíl Noé Moisés '+
+ 'Darío Mario Saúl Aarón Benjamín Agustín Valentín Hernán Concepción Asunción Encarnación Angélica Jéssica Érika Bárbara Débora '+
+ 'Ernestina Natalí Zoé Arón Edén Ximénez Solís Tepale Ortíz').split(' ').forEach(function(w){
+  var k = w.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();
+  if (k !== w.toLowerCase()) ACC[k] = w;
+});
+delete ACC['ortiz']; // Ortiz se escribe sin acento
+
+function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+function norm(s){ return String(s || '').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim(); }
+function phon(t){
+  return t.replace(/ll/g,'y').replace(/ch/g,'x').replace(/qu/g,'k').replace(/g([ei])/g,'j$1')
+          .replace(/c([ei])/g,'s$1').replace(/c/g,'k').replace(/z/g,'s').replace(/v/g,'b')
+          .replace(/h/g,'').replace(/y/g,'i').replace(/w/g,'u').replace(/(.)\1+/g,'$1');
+}
+function forms(t){
+  var out = [t, phon(t)];
+  (NICK[t] || []).forEach(function(c){ out.push(c, phon(c)); });
+  return out.filter(function(v, i){ return v && out.indexOf(v) === i; });
+}
+function lev(a, b){
+  if (a === b) return 0;
+  var m = a.length, n = b.length; if (!m) return n; if (!n) return m;
+  var prev = new Array(n + 1), cur = new Array(n + 1), i, j;
+  for (j = 0; j <= n; j++) prev[j] = j;
+  for (i = 1; i <= m; i++){
+    cur[0] = i;
+    for (j = 1; j <= n; j++){
+      var c = a.charCodeAt(i-1) === b.charCodeAt(j-1) ? 0 : 1;
+      cur[j] = Math.min(prev[j] + 1, cur[j-1] + 1, prev[j-1] + c);
+    }
+    var tmp = prev; prev = cur; cur = tmp;
+  }
+  return prev[n];
+}
+function tokScore(q, n){
+  if (n === q) return 5;
+  if (n.indexOf(q) === 0) return q.length >= 2 ? 4 : 2;
+  if (q.length >= 3){
+    var tol = q.length >= 7 ? 2 : 1;
+    if (Math.abs(n.length - q.length) <= tol){ var d = lev(q, n); if (d <= tol) return 3.4 - d * 0.4; }
+    if (n.length > q.length){ var dp = lev(q, n.slice(0, q.length)); if (dp <= (q.length >= 6 ? 2 : 1)) return 2.6 - dp * 0.3; }
+    if (q.length >= 4 && n.indexOf(q) > 0) return 1.5;
+  }
+  return 0;
+}
+function nameTokens(name){
+  var t = norm(name).split(' ').filter(Boolean);
+  var core = t.filter(function(w){ return !PARTICLES[w]; });
+  return core.length ? core : t;
+}
+function buildIndex(guests){
+  return guests.map(function(g){ return { g: g, toks: nameTokens(g.n).map(forms) }; });
+}
+function bestPair(qf, nf){
+  var best = 0;
+  for (var i = 0; i < qf.length; i++) for (var j = 0; j < nf.length; j++){
+    var s = tokScore(qf[i], nf[j]); if (s > best) best = s; if (best >= 5) return best;
+  }
+  return best;
+}
+function searchGuests(idx, q, max){
+  max = max || 8;
+  var qt = nameTokens(q);
+  if (!qt.length) return { hits: [], approx: [] };
+  var qf = qt.map(forms), out = [];
+  for (var k = 0; k < idx.length; k++){
+    var it = idx[k], sc = 0, miss = 0;
+    for (var a = 0; a < qf.length; a++){
+      var best = 0;
+      for (var b = 0; b < it.toks.length; b++){ var s = bestPair(qf[a], it.toks[b]); if (s > best) best = s; }
+      if (best > 0) sc += best; else miss++;
+    }
+    if (miss === qf.length) continue;
+    out.push({ g: it.g, sc: sc, miss: miss });
+  }
+  out.sort(function(x, y){ return x.miss - y.miss || y.sc - x.sc || x.g.n.localeCompare(y.g.n, 'es'); });
+  var hits = out.filter(function(o){ return o.miss === 0; }).slice(0, max);
+  var approx = out.filter(function(o){ return o.miss > 0 && o.sc >= 3; }).slice(0, hits.length ? 3 : max);
+  return { hits: hits, approx: approx };
+}
+function fixWord(w, i, accents){
+  var l = w.toLocaleLowerCase('es');
+  if (i > 0 && PARTICLES[l]) return l;
+  return l.split('-').map(function(p){
+    var base = p.charAt(0).toLocaleUpperCase('es') + p.slice(1);
+    if (accents){ var k = p.normalize('NFD').replace(/[̀-ͯ]/g,''); if (k === p && ACC[k]) return ACC[k]; }
+    return base;
+  }).join('-');
+}
+function fixName(s, accents){
+  s = String(s || '').replace(/[\t ]+/g,' ').replace(/\s+/g,' ').trim();
+  if (!s) return '';
+  return s.split(' ').map(function(w, i){ return fixWord(w, i, accents); }).join(' ');
+}
+function fmtTime(t){ if (!t) return ''; try { return new Date(t).toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' }); } catch(e){ return ''; } }
+function mesaVal(m){ return (m === 0 || m) ? m : null; }
+
+/* Reception widget: used by the main page and by the offline kit.
+   api: guests(), index(), arrivals(), arrive(id), undo(id), addWalkin({n,a,m}) -> id, areas(), suggestTable() */
+function mountReception(root, api){
+  root.innerHTML =
+    '<div class="rc">' +
+      '<div class="rc-search"><input class="rc-q" type="text" placeholder="Escribe nombre o apellido…" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="search"><button class="rc-clear" title="Limpiar" aria-label="Limpiar">×</button></div>' +
+      '<div class="rc-hint">Funciona sin acentos, con faltas de ortografía, con apodos (Lupita = Guadalupe) y en cualquier orden. Escribe un número para ver una mesa. Con un solo resultado, Enter registra la llegada.</div>' +
+      '<div class="rc-banner" hidden></div>' +
+      '<div class="rc-results"></div>' +
+    '</div>';
+  var q = root.querySelector('.rc-q'), res = root.querySelector('.rc-results'), banner = root.querySelector('.rc-banner');
+  var walkOpen = false, bannerTimer = null, deb = null, lastHits = [];
+
+  function card(g){
+    var arr = api.arrivals()[g.id], m = mesaVal(g.m);
+    return '<div class="res' + (arr ? ' is-in' : '') + '">' +
+      '<div class="res-main"><div class="res-name">' + esc(g.n) + '</div>' +
+        '<div class="res-meta">' + esc(g.a || 'Sin área') + (g.w ? ' · agregado en puerta' : '') + '</div>' +
+        (arr ? '<div class="res-in">✓ Ya llegó' + (arr.t ? ' · ' + fmtTime(arr.t) : '') + (arr.d ? ' · ' + esc(arr.d) : '') + '</div>' : '') +
+      '</div>' +
+      '<div class="res-mesa' + (m === null ? ' none' : '') + '"><span>Mesa</span><b>' + (m === null ? 'Sin mesa' : esc(m)) + '</b></div>' +
+      '<div class="res-act">' + (arr
+        ? '<button class="btn ghost" data-act="undo" data-id="' + esc(g.id) + '">Deshacer</button>'
+        : '<button class="btn primary big" data-act="arrive" data-id="' + esc(g.id) + '">Registrar llegada</button>') +
+      '</div></div>';
+  }
+  function walkForm(text){
+    var areas = api.areas();
+    return '<div class="walk"><h3>Agregar invitado que no está en la lista</h3><div class="row">' +
+      '<label class="field">Nombre<input class="inp" data-w="n" value="' + esc(fixName(text, true)) + '"></label>' +
+      '<label class="field">Área<input class="inp" data-w="a" list="rcAreas"><datalist id="rcAreas">' +
+        areas.map(function(a){ return '<option value="' + esc(a) + '">'; }).join('') + '</datalist></label>' +
+      '<label class="field sm">Mesa<input class="inp" data-w="m" type="number" min="1" value="' + esc(api.suggestTable() || '') + '"></label>' +
+      '<button class="btn ok" data-act="walkin">Agregar y registrar</button>' +
+      '<button class="btn ghost" data-act="walkcancel">Cancelar</button></div>' +
+      '<p class="muted" style="font-size:13px;margin:8px 0 0">La mesa sugerida es la primera con lugar libre.</p></div>';
+  }
+  function render(){
+    var text = q.value, t = norm(text);
+    lastHits = [];
+    if (!t){
+      var all = api.guests(), arrs = api.arrivals(), n = 0;
+      all.forEach(function(g){ if (arrs[g.id]) n++; });
+      res.innerHTML = all.length
+        ? '<div class="empty"><b>Listo para recibir invitados</b>' + n + ' de ' + all.length + ' ya llegaron. Escribe unas letras del nombre o del apellido.</div>'
+        : '<div class="empty"><b>Todavía no hay invitados</b>Agrega las listas en la pestaña “Preparar lista”.</div>';
+      return;
+    }
+    var mm = t.match(/^(?:mesa )?(\d{1,3})$/);
+    if (mm){
+      var num = Number(mm[1]);
+      var at = api.guests().filter(function(g){ return Number(g.m) === num; }).sort(function(a, b){ return a.n.localeCompare(b.n, 'es'); });
+      res.innerHTML = '<div class="rc-label">Mesa ' + num + ' · ' + at.length + ' invitados</div>' +
+        (at.length ? at.map(card).join('') : '<div class="empty">No hay nadie asignado a la mesa ' + num + '.</div>');
+      return;
+    }
+    var r = searchGuests(api.index(), text, 8);
+    lastHits = r.hits;
+    var html = '';
+    if (r.hits.length) html += r.hits.map(function(o){ return card(o.g); }).join('');
+    if (r.approx.length) html += '<div class="rc-label">' + (r.hits.length ? 'Otros parecidos' : 'No hay coincidencia exacta · parecidos') + '</div>' + r.approx.map(function(o){ return card(o.g); }).join('');
+    if (!r.hits.length && !r.approx.length) html += '<div class="empty"><b>Sin resultados para “' + esc(text) + '”</b>Prueba solo con el apellido o solo con el primer nombre.</div>';
+    if (t.length >= 3) html += walkOpen ? walkForm(text) : '<div style="text-align:center;margin-top:6px"><button class="btn ghost" data-act="walkopen">¿No aparece? Agregar invitado no listado</button></div>';
+    res.innerHTML = html;
+  }
+  function showBanner(g){
+    var m = mesaVal(g.m);
+    banner.innerHTML = '<div class="who"><small>Llegada registrada</small><b>' + esc(g.n) + '</b></div>' +
+      '<div class="mesa"><span>Mesa</span><b>' + (m === null ? '—' : esc(m)) + '</b></div>';
+    banner.hidden = false;
+    clearTimeout(bannerTimer);
+    bannerTimer = setTimeout(function(){ banner.hidden = true; }, 6000);
+  }
+  function doArrive(id){
+    var g = api.guests().filter(function(x){ return x.id === id; })[0];
+    if (!g) return;
+    api.arrive(id);
+    showBanner(g);
+    q.value = ''; walkOpen = false; render(); q.focus();
+  }
+  q.addEventListener('input', function(){ walkOpen = false; clearTimeout(deb); deb = setTimeout(render, 70); });
+  q.addEventListener('keydown', function(e){
+    if (e.key === 'Enter'){
+      e.preventDefault(); clearTimeout(deb); render();
+      if (lastHits.length === 1 && !api.arrivals()[lastHits[0].g.id]) doArrive(lastHits[0].g.id);
+      else if (lastHits.length > 1 && lastHits[0].sc > lastHits[1].sc + 1.5 && !api.arrivals()[lastHits[0].g.id]) doArrive(lastHits[0].g.id);
+    } else if (e.key === 'Escape'){ q.value = ''; render(); }
+  });
+  root.querySelector('.rc-clear').addEventListener('click', function(){ q.value = ''; walkOpen = false; render(); q.focus(); });
+  res.addEventListener('click', function(e){
+    var b = e.target.closest('[data-act]'); if (!b) return;
+    var act = b.getAttribute('data-act'), id = b.getAttribute('data-id');
+    if (act === 'arrive') doArrive(id);
+    else if (act === 'undo'){ api.undo(id); render(); }
+    else if (act === 'walkopen'){ walkOpen = true; render(); var f = res.querySelector('[data-w="a"]'); if (f) f.focus(); }
+    else if (act === 'walkcancel'){ walkOpen = false; render(); }
+    else if (act === 'walkin'){
+      var n = fixName(res.querySelector('[data-w="n"]').value, true);
+      var a = res.querySelector('[data-w="a"]').value.trim();
+      var mv = res.querySelector('[data-w="m"]').value;
+      if (!n) return;
+      var id2 = api.addWalkin({ n: n, a: a, m: mv === '' ? null : Number(mv) });
+      if (id2){ api.arrive(id2); showBanner({ n: n, m: mv === '' ? null : Number(mv) }); }
+      q.value = ''; walkOpen = false; render(); q.focus();
+    }
+  });
+  render();
+  return { refresh: function(){ if (!res.querySelector('.walk')) render(); }, focus: function(){ q.focus(); } };
+}
+function suggestTableFor(guests, seats){
+  var occ = {}, max = 0;
+  guests.forEach(function(g){ var m = mesaVal(g.m); if (m !== null){ occ[m] = (occ[m] || 0) + 1; if (Number(m) > max) max = Number(m); } });
+  for (var t = 1; t <= max; t++) if ((occ[t] || 0) < seats) return t;
+  return max + 1;
+}
+function newId(){ return 'g' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
+function toCSV(rows){
+  return '﻿' + rows.map(function(r){ return r.map(function(v){ v = String(v == null ? '' : v); return /[",\n;]/.test(v) ? '"' + v.replace(/"/g,'""') + '"' : v; }).join(','); }).join('\r\n');
+}
+</script>
+
+<!-- ===================== OFFLINE KIT (copied into the downloaded file) ===================== -->
+<script type="text/plain" id="kit-js">
+(function(){
+  var D = window.KIT_DATA, KEY = 'ranf_kit_' + D.gen;
+  var st = { arrivals: D.arrivals || {}, extra: [] };
+  try { var sv = JSON.parse(localStorage.getItem(KEY) || 'null'); if (sv) st = sv; } catch(e){}
+  var device = ''; try { device = localStorage.getItem('ranf_device') || ''; } catch(e){}
+  var G = [], idx = [];
+  function rebuild(){ G = D.guests.concat(st.extra); idx = buildIndex(G); }
+  function save(){ try { localStorage.setItem(KEY, JSON.stringify(st)); } catch(e){} head(); }
+  rebuild();
+  document.body.innerHTML =
+    '<header class="top"><div class="top-row"><div class="brand"><small>Recepción · kit sin internet</small><h1>' + esc(D.title) + '</h1></div>' +
+    '<div class="counter"><b id="kIn">0</b><span>de <span id="kTot">0</span> han llegado</span></div></div></header>' +
+    '<main><section id="kRc"></section>' +
+    '<div class="kit-foot"><label class="field" style="flex:1;min-width:160px">Nombre de este dispositivo<input class="inp" id="kDev" placeholder="Ej. Puerta 2" value="' + esc(device) + '"></label>' +
+    '<button class="btn" id="kExp">Exportar llegadas (CSV)</button></div>' +
+    '<p class="muted" style="max-width:860px;margin:12px auto 0;font-size:13px">Lista generada: ' + new Date(D.gen).toLocaleString('es-MX') + ' · Las llegadas se guardan en este navegador; al terminar, exporta el CSV.</p></main>';
+  function head(){
+    var n = 0; G.forEach(function(g){ if (st.arrivals[g.id]) n++; });
+    document.getElementById('kIn').textContent = n; document.getElementById('kTot').textContent = G.length;
+  }
+  var rc = mountReception(document.getElementById('kRc'), {
+    guests: function(){ return G; }, index: function(){ return idx; }, arrivals: function(){ return st.arrivals; },
+    arrive: function(id){ st.arrivals[id] = { t: Date.now(), d: device }; save(); },
+    undo: function(id){ delete st.arrivals[id]; save(); },
+    addWalkin: function(o){ var id = newId(); st.extra.push({ id: id, n: o.n, a: o.a, m: o.m, w: 1 }); rebuild(); save(); return id; },
+    areas: function(){ var s = {}; G.forEach(function(g){ if (g.a) s[g.a] = 1; }); return Object.keys(s).sort(); },
+    suggestTable: function(){ return suggestTableFor(G, D.seats || 10); }
+  });
+  head(); rc.focus();
+  document.getElementById('kDev').addEventListener('change', function(e){ device = e.target.value.trim(); try { localStorage.setItem('ranf_device', device); } catch(_){} });
+  document.getElementById('kExp').addEventListener('click', function(){
+    var rows = [['Nombre','Área','Mesa','Llegó','Hora','Dispositivo','Agregado en puerta']];
+    G.slice().sort(function(a, b){ return a.n.localeCompare(b.n, 'es'); }).forEach(function(g){
+      var a = st.arrivals[g.id];
+      rows.push([g.n, g.a, mesaVal(g.m) === null ? '' : g.m, a ? 'Sí' : 'No', a ? fmtTime(a.t) : '', a ? a.d : '', g.w ? 'Sí' : '']);
+    });
+    var blob = new Blob([toCSV(rows)], { type: 'text/csv;charset=utf-8' });
+    var link = document.createElement('a'); link.href = URL.createObjectURL(blob);
+    link.download = 'llegadas-' + (device || 'recepcion').replace(/[^\w-]+/g,'_') + '.csv';
+    document.body.appendChild(link); link.click(); link.remove();
+  });
+})();
+</script>
+
+<!-- ===================== APP ===================== -->
+<script>
+/* ====== CONFIGURACIÓN ======
+   Pega aquí la URL de tu Apps Script (la que termina en /exec).
+   Si la dejas vacía, la página la pide al abrirse. */
+var API_URL = '';
+
+(function(){
+  var $ = function(s){ return document.querySelector(s); };
+  var S = { mode: 'loading', role: null, roster: { title: '', seats: 10, guests: {} }, arrivals: {}, G: [], idx: [], preview: null, openMesa: null, sheetUrl: '', puertaKey: '' };
+  var tab = 'recepcion', rc = null, listDirty = false;
+  var device = lsGet('ranf_device') || '';
+  var apiUrl = API_URL || lsGet('ranf_api') || '';
+  var key = lsGet('ranf_key') || '';
+  var lastV = '', lastFull = 0, lastOk = 0, pend = 0, pollTimer = null, failures = 0;
+
+  // Link con clave: https://…/index.html#k=CLAVE
+  (function(){
+    var m = location.hash.match(/^#k=(.+)$/);
+    if (m){ key = decodeURIComponent(m[1]); lsSet('ranf_key', key); try { history.replaceState(null, '', location.pathname + location.search); } catch(e){} }
+  })();
+
+  function lsGet(k){ try { return localStorage.getItem(k); } catch(e){ return null; } }
+  function lsSet(k, v){ try { localStorage.setItem(k, v); } catch(e){} }
+  function lsDel(k){ try { localStorage.removeItem(k); } catch(e){} }
+  function toast(msg){ var t = $('#toast'); t.textContent = msg; t.hidden = false; clearTimeout(toast._t); toast._t = setTimeout(function(){ t.hidden = true; }, 4200); }
+
+  function setRoster(r){
+    r = r || {};
+    S.roster = { title: r.title || '', seats: Number(r.seats) || 10, guests: r.guests || {} };
+    var arr = [];
+    Object.keys(S.roster.guests).forEach(function(id){
+      var g = S.roster.guests[id];
+      if (g && g.n) arr.push({ id: id, n: g.n, a: g.a || '', m: mesaVal(g.m), o: g.o || 0, w: g.w ? 1 : 0 });
+    });
+    arr.sort(function(a, b){ return a.o - b.o || (a.id < b.id ? -1 : 1); });
+    S.G = arr; S.idx = buildIndex(arr);
+  }
+  function areas(){ var s = {}; S.G.forEach(function(g){ if (g.a) s[g.a] = 1; }); return Object.keys(s).sort(function(a, b){ return a.localeCompare(b, 'es'); }); }
+  function arrivedCount(){ var n = 0; S.G.forEach(function(g){ if (S.arrivals[g.id]) n++; }); return n; }
+  function isAdmin(){ return S.mode === 'local' || S.role === 'admin'; }
+
+  /* ---------- Google Sheets (Apps Script) ---------- */
+  function api(params, post){
+    var p;
+    if (post){
+      // text/plain evita la verificación CORS previa; Apps Script lo lee igual.
+      p = fetch(apiUrl, { method: 'POST', body: JSON.stringify(Object.assign({ key: key }, params)) });
+    } else {
+      var qs = Object.keys(params).map(function(k){ return encodeURIComponent(k) + '=' + encodeURIComponent(params[k]); }).join('&');
+      p = fetch(apiUrl + (apiUrl.indexOf('?') >= 0 ? '&' : '?') + 'key=' + encodeURIComponent(key) + '&' + qs + '&_=' + Date.now());
+    }
+    return p.then(function(r){ return r.json(); }).then(function(j){
+      if (!j.ok){ var e = new Error(j.error || 'error'); e.server = j.error; throw e; }
+      return j;
+    });
+  }
+  function applyServer(r){
+    if (!r || r.unchanged) return;
+    lastV = r.v; lastFull = Date.now();
+    var prevRole = S.role;
+    S.role = r.role; S.sheetUrl = r.sheetUrl || ''; S.puertaKey = r.puertaKey || '';
+    var g = {};
+    (r.guests || []).forEach(function(x){ g[x.id] = { n: x.n, a: x.a, m: x.m, o: x.o, w: x.w }; });
+    setRoster({ title: r.title, seats: r.seats, guests: g });
+    S.arrivals = r.arrivals || {};
+    if (prevRole !== S.role) applyRole();
+    renderAll();
+  }
+  function schedule(ms){ clearTimeout(pollTimer); pollTimer = setTimeout(poll, ms || (document.hidden ? 15000 : 4000)); }
+  function poll(){
+    if (S.mode !== 'api') return;
+    if (pend > 0){ schedule(1500); return; }
+    var full = Date.now() - lastFull > 30000;
+    api({ action: 'list', v: full ? '' : lastV }).then(function(r){
+      lastOk = Date.now(); failures = 0;
+      if (pend === 0) applyServer(r);
+      renderHeader(); schedule();
+    }, function(e){
+      if (e.server === 'clave'){ badKey(); return; }
+      failures++; renderHeader(); schedule(Math.min(4000 * failures, 20000));
+    });
+  }
+  document.addEventListener('visibilitychange', function(){ if (!document.hidden && S.mode === 'api') poll(); });
+
+  var wq = Promise.resolve();
+  function send(params){
+    if (S.mode !== 'api') return Promise.resolve();
+    pend++; renderHeader();
+    var p = wq.then(function(){ return api(params, true); }).then(function(r){
+      pend--; lastOk = Date.now();
+      if (pend === 0) applyServer(r);
+      renderHeader();
+    }, function(e){
+      pend--;
+      if (e.server === 'clave'){ badKey(); return; }
+      toast(e.server === 'permiso' ? 'Con la clave de puerta solo se pueden registrar llegadas.' : 'No se pudo guardar en el Sheet. Revisa la conexión; se volverá a sincronizar.');
+      lastV = ''; renderHeader(); schedule(1000);
+    });
+    wq = p.catch(function(){});
+    return p;
+  }
+
+  /* ---------- Operaciones (optimistas: se ven al instante y se guardan detrás) ---------- */
+  function saveLocal(){ if (S.mode === 'local') lsSet('ranf_data', JSON.stringify({ roster: S.roster, arrivals: S.arrivals })); }
+  function applyPatch(map){
+    var g = Object.assign({}, S.roster.guests);
+    Object.keys(map).forEach(function(k){ g[k] = map[k] === null ? null : Object.assign({}, g[k] || {}, map[k]); });
+    setRoster(Object.assign({}, S.roster, { guests: g }));
+    renderAll(); saveLocal();
+  }
+  function patchGuests(map){ applyPatch(map); return send({ action: 'patch', map: map }); }
+  function patchMeta(obj){
+    setRoster(Object.assign({}, S.roster, obj)); renderAll(); saveLocal();
+    return send(Object.assign({ action: 'config' }, obj.title !== undefined ? { title: obj.title } : {}, obj.seats !== undefined ? { seats: obj.seats } : {}));
+  }
+  function arrive(id){
+    if (S.arrivals[id]) return;
+    S.arrivals = Object.assign({}, S.arrivals); S.arrivals[id] = { t: Date.now(), d: device || '' };
+    afterArrivals(); saveLocal();
+    send({ action: 'arrive', id: id, d: device || '' });
+  }
+  function unarrive(id){
+    S.arrivals = Object.assign({}, S.arrivals); delete S.arrivals[id];
+    afterArrivals(); saveLocal();
+    send({ action: 'undo', id: id });
+  }
+  function addWalkin(o){
+    var id = newId(), map = {};
+    map[id] = { n: o.n, a: o.a, m: o.m, o: Date.now(), w: 1 };
+    applyPatch(map);
+    send({ action: 'walkin', id: id, n: o.n, a: o.a, m: o.m });
+    return id;
+  }
+  function clearArrivals(){ S.arrivals = {}; afterArrivals(); saveLocal(); if (rc) rc.refresh(); send({ action: 'clearArrivals' }).then(function(){ toast('Registro de llegadas borrado.'); }); }
+  function clearAll(){ setRoster({ title: S.roster.title, seats: S.roster.seats, guests: {} }); S.arrivals = {}; renderAll(); saveLocal(); send({ action: 'clearAll' }); }
+  function afterArrivals(){ renderHeader(); if (tab === 'mesas') renderMesas(); if (tab === 'preparar') renderList(); }
+
+  /* ---------- Conexión ---------- */
+  function showConnect(msg){
+    S.mode = 'setup'; clearTimeout(pollTimer);
+    document.body.classList.add('setup');
+    $('#v-conectar').hidden = false;
+    ['recepcion', 'mesas', 'preparar'].forEach(function(v){ $('#v-' + v).hidden = true; });
+    $('#cUrlWrap').hidden = !!API_URL;
+    $('#cUrl').value = apiUrl; $('#cKey').value = '';
+    $('#cMsg').textContent = msg || '';
+    renderHeader();
+    setTimeout(function(){ (API_URL ? $('#cKey') : $('#cUrl')).focus(); }, 50);
+  }
+  function hideConnect(){ document.body.classList.remove('setup'); $('#v-conectar').hidden = true; showTab(tab); }
+  function badKey(){ lsDel('ranf_key'); key = ''; showConnect('La clave no es válida. Pídesela a quien organiza el registro.'); }
+  function connect(){
+    if (!apiUrl || !key){ showConnect(''); return; }
+    S.mode = 'connecting'; renderHeader();
+    api({ action: 'list' }).then(function(r){
+      S.mode = 'api'; lastOk = Date.now(); hideConnect(); applyServer(r); renderHeader(); schedule();
+    }, function(e){
+      if (e.server === 'clave'){ badKey(); return; }
+      showConnect('No se pudo conectar con el Sheet. Revisa la URL del Apps Script y que esté implementado para “Cualquier usuario”.');
+    });
+  }
+  function startLocal(){
+    S.mode = 'local'; S.role = 'admin'; lsSet('ranf_mode', 'local');
+    try { var d = JSON.parse(lsGet('ranf_data') || 'null'); if (d){ setRoster(d.roster); S.arrivals = d.arrivals || {}; } } catch(e){}
+    hideConnect(); applyRole(); renderAll();
+  }
+  function applyRole(){
+    var adm = isAdmin();
+    document.querySelector('.tab[data-tab="preparar"]').hidden = !adm;
+    if (!adm && tab === 'preparar') showTab('recepcion');
+  }
+
+  /* ---------- Render ---------- */
+  function renderHeader(){
+    $('#hTitle').textContent = S.roster.title || 'Fiesta de fin de año';
+    $('#hIn').textContent = arrivedCount();
+    $('#hTot').textContent = S.G.length;
+    var st;
+    if (S.mode === 'api'){
+      var stale = Date.now() - lastOk > 15000;
+      st = stale ? ['bad', 'Sin conexión · reintentando'] : (pend ? ['warn', 'Guardando…'] : ['ok', 'Conectado a Google Sheets' + (S.role === 'puerta' ? ' · puerta' : '')]);
+    } else st = {
+      loading: ['', 'Cargando…'], connecting: ['', 'Conectando…'], setup: ['warn', 'Sin conectar'],
+      local: ['warn', 'Modo local: solo este dispositivo']
+    }[S.mode] || ['', ''];
+    var p = $('#hStatus'); p.className = 'pill ' + st[0]; p.querySelector('span').textContent = st[1];
+    $('#areasList').innerHTML = areas().map(function(a){ return '<option value="' + esc(a) + '">'; }).join('');
+  }
+  setInterval(function(){ if (S.mode === 'api') renderHeader(); }, 5000);
+  function renderAll(){
+    renderHeader();
+    if (rc) rc.refresh();
+    if (tab === 'mesas') renderMesas();
+    if (tab === 'preparar') renderPrepare();
+  }
+
+  /* Mesas */
+  function tablesData(){
+    var t = {}, none = [];
+    S.G.forEach(function(g){ var m = mesaVal(g.m); if (m === null){ none.push(g); return; } (t[m] = t[m] || []).push(g); });
+    return { t: t, none: none };
+  }
+  function renderMesas(){
+    var d = tablesData(), seats = S.roster.seats, keys = Object.keys(d.t).sort(function(a, b){ return Number(a) - Number(b); });
+    var f = norm($('#mFilter').value), onlyP = $('#mOnlyPending').checked, arrived = arrivedCount();
+    $('#mStats').innerHTML =
+      '<div class="stat"><b>' + S.G.length + '</b><span>invitados</span></div>' +
+      '<div class="stat"><b>' + arrived + '</b><span>ya llegaron</span></div>' +
+      '<div class="stat"><b>' + keys.length + '</b><span>mesas usadas</span></div>' +
+      '<div class="stat"><b>' + d.none.length + '</b><span>sin mesa</span></div>';
+    var list = keys.map(function(k){ return { k: k, g: d.t[k] }; });
+    if (d.none.length) list.push({ k: '', g: d.none });
+    var html = list.filter(function(x){
+      if (onlyP && x.g.every(function(g){ return S.arrivals[g.id]; })) return false;
+      if (!f) return true;
+      return x.g.some(function(g){ return norm(g.n + ' ' + g.a).indexOf(f) >= 0; }) || ('mesa ' + x.k) === f || x.k === f;
+    }).map(function(x){
+      var n = x.g.length, inn = x.g.filter(function(g){ return S.arrivals[g.id]; }).length;
+      var ar = {}; x.g.forEach(function(g){ if (g.a) ar[g.a] = (ar[g.a] || 0) + 1; });
+      var open = S.openMesa === x.k, over = x.k !== '' && n > seats;
+      var body = open ? '<div class="mesa-list">' + x.g.slice().sort(function(a, b){ return a.n.localeCompare(b.n, 'es'); }).map(function(g){
+        var a = S.arrivals[g.id];
+        return '<div class="mini"><button class="chk' + (a ? ' on' : '') + '" data-act="' + (a ? 'undo' : 'arrive') + '" data-id="' + esc(g.id) + '" title="' + (a ? 'Deshacer llegada' : 'Registrar llegada') + '">' + (a ? '✓' : '') + '</button>' +
+          '<div class="nm">' + esc(g.n) + '<small>' + esc(g.a || 'Sin área') + (a && a.t ? ' · ' + fmtTime(a.t) : '') + '</small></div></div>';
+      }).join('') + '</div>' : '';
+      return '<div class="mesa-c' + (over ? ' over' : '') + (open ? ' open' : '') + '">' +
+        '<div class="mesa-h" data-act="toggle" data-k="' + esc(x.k) + '" style="cursor:pointer"><b>' + (x.k === '' ? 'Sin mesa' : 'Mesa ' + esc(x.k)) + '</b>' +
+        '<span>' + n + (x.k !== '' ? '/' + seats : '') + ' lugares · ' + inn + ' llegaron</span></div>' +
+        '<div class="bar"><i style="width:' + (n ? Math.round(inn / n * 100) : 0) + '%"></i></div>' +
+        '<div class="mesa-tags">' + (over ? '<span class="tag bad">Sobrecupo</span>' : '') + Object.keys(ar).map(function(a){ return '<span class="tag">' + esc(a) + ' · ' + ar[a] + '</span>'; }).join('') + '</div>' +
+        body + '</div>';
+    }).join('');
+    $('#mGrid').innerHTML = html || '<div class="empty" style="grid-column:1/-1"><b>No hay mesas que mostrar</b>Asigna mesas en la pestaña “Preparar lista”.</div>';
+  }
+
+  /* Preparar */
+  function renderPrepare(){
+    var ae = document.activeElement;
+    if (ae !== $('#aSeats')) $('#aSeats').value = S.roster.seats;
+    if (ae !== $('#eTitle')) $('#eTitle').value = S.roster.title;
+    if (ae !== $('#dName')) $('#dName').value = device;
+    var ar = areas(), cur = $('#aArea').value, curL = $('#lArea').value;
+    $('#aArea').innerHTML = ar.length ? ar.map(function(a){ return '<option' + (a === cur ? ' selected' : '') + '>' + esc(a) + '</option>'; }).join('') : '<option value="">(sin áreas)</option>';
+    $('#lArea').innerHTML = '<option value="">Todas las áreas</option>' + ar.map(function(a){ return '<option' + (a === curL ? ' selected' : '') + '>' + esc(a) + '</option>'; }).join('');
+    var conn = $('#xConn');
+    if (S.mode === 'api'){
+      var doorLink = S.puertaKey ? location.origin + location.pathname + '#k=' + encodeURIComponent(S.puertaKey) : '';
+      conn.innerHTML = '<p class="sec-d" style="margin:14px 0 8px">Conectado a Google Sheets como <b>administrador</b>.' + (S.sheetUrl ? ' <a href="' + esc(S.sheetUrl) + '" target="_blank" rel="noopener">Abrir el Sheet</a>' : '') + '</p>' +
+        (doorLink ? '<label class="field">Link para las tablets de la puerta (entran sin poder editar la lista)<div class="row" style="align-items:center"><input class="inp" id="xDoor" readonly value="' + esc(doorLink) + '" style="flex:1;min-width:200px"><button class="btn" id="xDoorCopy">Copiar</button></div></label>' : '') +
+        '<div class="row" style="margin-top:10px"><button class="btn ghost" id="xLogout">Cerrar sesión en este dispositivo</button></div>';
+    } else if (S.mode === 'local'){
+      conn.innerHTML = '<p class="sec-d" style="margin:14px 0 8px">Estás en <b>modo local</b>: nada se comparte con otros dispositivos.</p><button class="btn" id="xLogout">Conectar con Google Sheets</button>';
+    } else conn.innerHTML = '';
+    renderList();
+  }
+  function renderList(){
+    var wrap = $('#lWrap');
+    if (wrap.contains(document.activeElement) && document.activeElement.tagName === 'INPUT'){ listDirty = true; return; }
+    listDirty = false;
+    var f = $('#lFilter').value, fa = $('#lArea').value, rows = S.G;
+    if (fa) rows = rows.filter(function(g){ return g.a === fa; });
+    if (norm(f)){
+      var r = searchGuests(buildIndex(rows), f, 500), ids = {};
+      r.hits.forEach(function(o){ ids[o.g.id] = 1; });
+      rows = rows.filter(function(g){ return ids[g.id]; });
+    }
+    $('#lCount').textContent = '· ' + S.G.length + ' invitados';
+    if (!S.G.length){ wrap.innerHTML = '<div class="empty"><b>La lista está vacía</b>Pega la primera lista arriba.</div>'; return; }
+    wrap.innerHTML = '<table class="t"><thead><tr><th>Nombre</th><th>Área</th><th>Mesa</th><th>Llegada</th><th></th></tr></thead><tbody>' +
+      rows.map(function(g){
+        var a = S.arrivals[g.id];
+        return '<tr><td><input class="inp" data-id="' + esc(g.id) + '" data-f="n" value="' + esc(g.n) + '"></td>' +
+          '<td><input class="inp" data-id="' + esc(g.id) + '" data-f="a" value="' + esc(g.a) + '" list="areasList"></td>' +
+          '<td><input class="inp n" type="number" min="1" data-id="' + esc(g.id) + '" data-f="m" value="' + (g.m === null ? '' : esc(g.m)) + '"></td>' +
+          '<td>' + (a ? '<span class="tag ok">✓ ' + (a.t ? fmtTime(a.t) : 'Sí') + '</span>' : '<span class="muted">—</span>') + (g.w ? ' <span class="tag warn">En puerta</span>' : '') + '</td>' +
+          '<td style="text-align:right"><button class="btn ghost" data-del="' + esc(g.id) + '" title="Borrar">Borrar</button></td></tr>';
+      }).join('') + '</tbody></table>';
+  }
+
+  /* Pegar listas */
+  function areaName(s){
+    s = s.replace(/:\s*$/, '').replace(/^(del|de la|de los|de las|de)\s+/i, '').trim();
+    return s.split(/\s+/).map(function(w, i){ return /^[A-ZÁÉÍÓÚÑ]{2,6}$/.test(w) ? w : fixWord(w, i, true); }).join(' ');
+  }
+  function parsePaste(text, defArea, accents){
+    var area = defArea ? areaName(defArea) : '', out = [];
+    text.split(/\r?\n/).forEach(function(raw){
+      var line = raw.replace(/ /g, ' ').trim();
+      if (!line) return;
+      if (line.indexOf('\t') >= 0){
+        var c = line.split('\t').map(function(x){ return x.trim(); });
+        if (/^nombre/i.test(c[0])) return;
+        var n0 = fixName(c[0].replace(/^\s*(\d+[.)-]?|[-•*·])\s+/, ''), accents);
+        if (n0) out.push({ n: n0, a: c[1] ? areaName(c[1]) : area, m: c[2] && /^\d+$/.test(c[2]) ? Number(c[2]) : null });
+        return;
+      }
+      if (/:\s*$/.test(line) || (/^(del|de la|de los|de las)\s+\S+(\s+\S+)?\s*$/i.test(line) && line.split(/\s+/).length <= 4 && /[A-Z]{2,}/.test(line))){ area = areaName(line); return; }
+      line = line.replace(/^\s*(\d+[.)-]?|[-•*·])\s+/, '');
+      var n = fixName(line, accents);
+      if (n) out.push({ n: n, a: area, m: null });
+    });
+    return out;
+  }
+  function dupKey(n){ return nameTokens(n).map(function(t){ return phon(NICK[t] ? NICK[t][0] : t); }).sort().join(' '); }
+  function nearDup(n, pool){
+    var qt = nameTokens(n).map(forms);
+    if (qt.length < 2) return null;
+    for (var i = 0; i < pool.length; i++){
+      var it = pool[i], small = qt.length <= it.toks.length ? qt : it.toks, big = small === qt ? it.toks : qt;
+      if (small.length < 2) continue;
+      if (small.every(function(f){ return big.some(function(nf){ return bestPair(f, nf) >= 3; }); })) return it.g;
+    }
+    return null;
+  }
+  function reviewPaste(){
+    var items = parsePaste($('#pText').value, $('#pArea').value.trim(), $('#pAccents').checked);
+    if (!items.length){ toast('No encontré nombres en el texto.'); return; }
+    var keys = {}; S.G.forEach(function(g){ keys[dupKey(g.n)] = g; });
+    var seen = {}, pool = S.idx.slice();
+    S.preview = items.map(function(it){
+      var k = dupKey(it.n), w = [], inc = true;
+      if (keys[k]){ w.push(['bad', 'Ya está: ' + keys[k].n + (keys[k].a ? ' (' + keys[k].a + ')' : '')]); inc = false; }
+      else if (seen[k]){ w.push(['bad', 'Repetido en esta lista']); inc = false; }
+      else { var nd = nearDup(it.n, pool); if (nd) w.push(['warn', '¿Es ' + nd.n + (nd.a ? ' (' + nd.a + ')' : '') + '?']); }
+      if (nameTokens(it.n).length < 2) w.push(['warn', 'Solo un nombre']);
+      if (!it.a) w.push(['warn', 'Sin área']);
+      seen[k] = 1;
+      pool.push({ g: { n: it.n, a: it.a }, toks: nameTokens(it.n).map(forms) });
+      return { n: it.n, a: it.a, m: it.m, inc: inc, w: w };
+    });
+    renderPreview();
+  }
+  function renderPreview(){
+    var p = S.preview, box = $('#pPreview');
+    if (!p){ box.innerHTML = ''; return; }
+    var nInc = p.filter(function(x){ return x.inc; }).length, nW = p.filter(function(x){ return x.w.length; }).length;
+    box.innerHTML = '<div class="pv"><table class="t"><thead><tr><th></th><th>Nombre</th><th>Área</th><th>Mesa</th><th>Revisar</th></tr></thead><tbody>' +
+      p.map(function(x, i){
+        return '<tr class="' + (x.inc ? '' : 'off') + '"><td><input type="checkbox" data-pi="' + i + '"' + (x.inc ? ' checked' : '') + '></td>' +
+          '<td><input class="inp" data-pf="n" data-pi="' + i + '" value="' + esc(x.n) + '"></td>' +
+          '<td><input class="inp" data-pf="a" data-pi="' + i + '" value="' + esc(x.a) + '" list="areasList"></td>' +
+          '<td>' + (x.m === null ? '' : esc(x.m)) + '</td>' +
+          '<td>' + x.w.map(function(w){ return '<span class="tag ' + w[0] + '">' + esc(w[1]) + '</span>'; }).join(' ') + '</td></tr>';
+      }).join('') + '</tbody></table></div>' +
+      '<div class="row" style="margin-top:12px;justify-content:space-between;align-items:center"><span class="muted" style="font-size:14px">' + p.length + ' leídos · ' + nW + ' con algo que revisar</span>' +
+      '<div class="row"><button class="btn ghost" id="pCancel">Cancelar</button><button class="btn primary" id="pAdd">Agregar ' + nInc + ' invitados</button></div></div>';
+  }
+  function commitPreview(){
+    var p = S.preview.filter(function(x){ return x.inc && x.n.trim(); });
+    if (!p.length){ toast('No hay nombres seleccionados.'); return; }
+    var map = {}, base = Date.now();
+    p.forEach(function(x, i){ map[newId() + i] = { n: fixName(x.n, false), a: x.a.trim(), m: x.m, o: base + i }; });
+    patchGuests(map).then(function(){ toast(p.length + ' invitados agregados.'); });
+    S.preview = null; $('#pText').value = ''; renderPreview();
+  }
+
+  /* Mesas: asignación */
+  function autoAssign(){
+    var seats = Number($('#aSeats').value) || 10, occ = {};
+    S.G.forEach(function(g){ if (g.m !== null) occ[g.m] = (occ[g.m] || 0) + 1; });
+    var groups = {}, order = [];
+    S.G.forEach(function(g){ if (g.m === null){ var a = g.a || 'Sin área'; if (!groups[a]){ groups[a] = []; order.push(a); } groups[a].push(g); } });
+    if (!order.length){ toast('Todos ya tienen mesa.'); return; }
+    var map = {}, chunks = [];
+    order.forEach(function(a){
+      var list = groups[a];
+      while (list.length > seats){
+        var t = 1; while ((occ[t] || 0) > 0) t++;
+        list.splice(0, seats).forEach(function(g){ map[g.id] = { m: t }; });
+        occ[t] = seats;
+      }
+      if (list.length) chunks.push(list);
+    });
+    chunks.sort(function(a, b){ return b.length - a.length; });
+    chunks.forEach(function(list){
+      var t = 1; while (seats - (occ[t] || 0) < list.length) t++;
+      list.forEach(function(g){ map[g.id] = { m: t }; });
+      occ[t] = (occ[t] || 0) + list.length;
+    });
+    var n = Object.keys(map).length;
+    if (seats !== S.roster.seats) patchMeta({ seats: seats });
+    patchGuests(map).then(function(){ toast('Mesa asignada a ' + n + ' invitados.'); });
+  }
+  function assignArea(){
+    var a = $('#aArea').value, m = Number($('#aMesa').value);
+    if (!a || !m){ toast('Elige un área y un número de mesa.'); return; }
+    var map = {}, n = 0;
+    S.G.forEach(function(g){ if (g.a === a){ map[g.id] = { m: m }; n++; } });
+    patchGuests(map).then(function(){ toast(n + ' de ' + a + ' a la mesa ' + m + '.'); });
+  }
+  function clearMesas(){ var map = {}; S.G.forEach(function(g){ map[g.id] = { m: null }; }); patchGuests(map); }
+
+  /* Exportar */
+  function csvRows(){
+    var rows = [['Nombre','Área','Mesa','Llegó','Hora','Dispositivo','Agregado en puerta']];
+    S.G.slice().sort(function(a, b){ return a.n.localeCompare(b.n, 'es'); }).forEach(function(g){
+      var a = S.arrivals[g.id];
+      rows.push([g.n, g.a, g.m === null ? '' : g.m, a ? 'Sí' : 'No', a && a.t ? fmtTime(a.t) : '', a ? (a.d || '') : '', g.w ? 'Sí' : '']);
+    });
+    return rows;
+  }
+  function slug(s){ return norm(s).replace(/ /g, '-') || 'fiesta'; }
+  function buildKit(){
+    var css = document.getElementById('app-css').textContent;
+    var core = document.getElementById('core-js').textContent;
+    var kit = document.getElementById('kit-js').textContent;
+    var title = S.roster.title || 'Fiesta de fin de año RAN';
+    var data = { title: title, seats: S.roster.seats, gen: Date.now(), arrivals: S.arrivals,
+      guests: S.G.map(function(g){ return { id: g.id, n: g.n, a: g.a, m: g.m, w: g.w }; }) };
+    var json = JSON.stringify(data).replace(/</g, '\\u003c');
+    var close = '</' + 'script>';
+    return '<!DOCTYPE html>\n<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">' +
+      '<title>Recepción · ' + esc(title) + '</title><style>' + css + '</style></head><body class="kit">' +
+      '<script>window.KIT_DATA=' + json + ';' + close + '<script>' + core + close + '<script>' + kit + close + '</body></html>';
+  }
+  function download(filename, data, type){
+    var blob = new Blob([data], { type: type });
+    var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = filename;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function(){ URL.revokeObjectURL(a.href); }, 5000);
+  }
+
+  /* ---------- Eventos ---------- */
+  function showTab(name){
+    tab = name;
+    document.querySelectorAll('.tab').forEach(function(x){ x.setAttribute('aria-selected', x.getAttribute('data-tab') === tab ? 'true' : 'false'); });
+    ['recepcion', 'mesas', 'preparar'].forEach(function(v){ $('#v-' + v).hidden = v !== tab || S.mode === 'setup'; });
+    if (tab === 'mesas') renderMesas();
+    if (tab === 'preparar') renderPrepare();
+    if (tab === 'recepcion' && rc){ rc.refresh(); rc.focus(); }
+  }
+  document.querySelectorAll('.tab').forEach(function(b){ b.addEventListener('click', function(){ if (S.mode !== 'setup') showTab(b.getAttribute('data-tab')); }); });
+
+  $('#cForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    if (!API_URL){ apiUrl = $('#cUrl').value.trim(); lsSet('ranf_api', apiUrl); }
+    key = $('#cKey').value.trim(); lsSet('ranf_key', key);
+    if (!apiUrl || !key){ $('#cMsg').textContent = 'Faltan datos.'; return; }
+    $('#cMsg').textContent = 'Conectando…';
+    connect();
+  });
+  $('#cLocal').addEventListener('click', startLocal);
+
+  $('#mFilter').addEventListener('input', renderMesas);
+  $('#mOnlyPending').addEventListener('change', renderMesas);
+  $('#mGrid').addEventListener('click', function(e){
+    var b = e.target.closest('[data-act]'); if (!b) return;
+    var act = b.getAttribute('data-act');
+    if (act === 'toggle'){ var k = b.getAttribute('data-k'); S.openMesa = S.openMesa === k ? null : k; renderMesas(); }
+    else if (act === 'arrive') arrive(b.getAttribute('data-id'));
+    else if (act === 'undo') unarrive(b.getAttribute('data-id'));
+  });
+
+  $('#pReview').addEventListener('click', reviewPaste);
+  $('#pPreview').addEventListener('change', function(e){
+    var i = e.target.getAttribute('data-pi'); if (i === null) return;
+    var x = S.preview[Number(i)], f = e.target.getAttribute('data-pf');
+    if (f) x[f] = e.target.value; else { x.inc = e.target.checked; renderPreview(); }
+  });
+  $('#pPreview').addEventListener('click', function(e){
+    if (e.target.id === 'pAdd') commitPreview();
+    if (e.target.id === 'pCancel'){ S.preview = null; renderPreview(); }
+  });
+
+  $('#aSeats').addEventListener('change', function(e){ var v = Number(e.target.value); if (v > 0) patchMeta({ seats: v }); });
+  $('#eTitle').addEventListener('change', function(e){ patchMeta({ title: e.target.value.trim() }); });
+  $('#dName').addEventListener('change', function(e){ device = e.target.value.trim(); lsSet('ranf_device', device); toast('Este dispositivo es “' + (device || 'sin nombre') + '”.'); });
+  $('#aAuto').addEventListener('click', autoAssign);
+  $('#aAreaBtn').addEventListener('click', assignArea);
+
+  function armed(btn, fn){
+    if (btn.classList.contains('armed')){ btn.classList.remove('armed'); btn.textContent = btn._label; fn(); return; }
+    btn._label = btn._label || btn.textContent;
+    btn.classList.add('armed'); btn.textContent = btn.getAttribute('data-confirm') || '¿Seguro?';
+    setTimeout(function(){ if (btn.classList.contains('armed')){ btn.classList.remove('armed'); btn.textContent = btn._label; } }, 3500);
+  }
+  $('#aClear').addEventListener('click', function(){ armed(this, clearMesas); });
+  $('#zArrivals').addEventListener('click', function(){ armed(this, clearArrivals); });
+  $('#zAll').addEventListener('click', function(){ armed(this, clearAll); });
+
+  $('#lFilter').addEventListener('input', renderList);
+  $('#lArea').addEventListener('change', renderList);
+  $('#lWrap').addEventListener('change', function(e){
+    var id = e.target.getAttribute('data-id'), f = e.target.getAttribute('data-f'); if (!id || !f) return;
+    var v = e.target.value, o = {};
+    if (f === 'n'){ v = fixName(v, false); if (!v) return; }
+    if (f === 'a') v = v.trim();
+    if (f === 'm') v = v === '' ? null : Number(v);
+    o[f] = v; var map = {}; map[id] = o; patchGuests(map);
+  });
+  $('#lWrap').addEventListener('focusout', function(){ setTimeout(function(){ if (listDirty) renderList(); }, 0); });
+  $('#lWrap').addEventListener('click', function(e){
+    var b = e.target.closest('[data-del]'); if (!b) return;
+    b.setAttribute('data-confirm', '¿Borrar?');
+    armed(b, function(){ var id = b.getAttribute('data-del'), map = {}; map[id] = null; if (S.arrivals[id]){ S.arrivals = Object.assign({}, S.arrivals); delete S.arrivals[id]; } patchGuests(map); });
+  });
+
+  $('#xCsv').addEventListener('click', function(){ download('invitados-' + slug(S.roster.title) + '.csv', toCSV(csvRows()), 'text/csv;charset=utf-8'); });
+  $('#xKit').addEventListener('click', function(){
+    if (!S.G.length){ toast('Primero agrega invitados.'); return; }
+    download('recepcion-' + slug(S.roster.title) + '.html', buildKit(), 'text/html;charset=utf-8');
+  });
+  $('#xConn').addEventListener('click', function(e){
+    if (e.target.id === 'xDoorCopy'){
+      var v = $('#xDoor').value;
+      (navigator.clipboard ? navigator.clipboard.writeText(v) : Promise.reject()).then(function(){ toast('Link copiado.'); }, function(){ $('#xDoor').select(); });
+    }
+    if (e.target.id === 'xLogout'){ lsDel('ranf_key'); lsDel('ranf_mode'); key = ''; S.role = null; showConnect(''); }
+  });
+
+  rc = mountReception($('#v-recepcion'), {
+    guests: function(){ return S.G; },
+    index: function(){ return S.idx; },
+    arrivals: function(){ return S.arrivals; },
+    arrive: arrive, undo: unarrive, addWalkin: addWalkin, areas: areas,
+    suggestTable: function(){ return suggestTableFor(S.G, S.roster.seats); }
+  });
+  renderHeader();
+  if (lsGet('ranf_mode') === 'local' && !key) startLocal(); else connect();
+})();
+</script>
+</body>
+</html>
