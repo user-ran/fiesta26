@@ -161,6 +161,48 @@ body.setup .tabs{visibility:hidden}
 }
 .kit-foot{max-width:860px;margin:28px auto 0;display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;font-size:14px}
 </style>
+<style id="map-css">
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+.seg button{border:0;background:transparent;padding:9px 13px;font-weight:600;font-size:14px;color:var(--muted)}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button.on{background:var(--guinda2);color:#fff}
+.mp-wrap{overflow:auto;background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:8px;-webkit-overflow-scrolling:touch;max-height:calc(100vh - 150px)}
+.mp-svg{display:block;max-width:none}
+.mp-hits{display:flex;gap:6px;flex-wrap:wrap;margin:-4px 0 12px}
+.chip{border:1px solid var(--line);background:#fff;border-radius:99px;padding:6px 12px;font-size:13px;font-weight:600}
+.chip:hover{border-color:var(--guinda2)}
+.mp-legend{display:flex;gap:16px;flex-wrap:wrap;align-items:center;font-size:13px;color:var(--muted);margin-top:12px}
+.mp-legend i{display:inline-block;width:16px;height:16px;border-radius:5px;border:1.5px solid #B9AE9F;vertical-align:-3px;margin-right:5px}
+.mp-alert{border-radius:12px;padding:10px 14px;margin-bottom:12px;font-size:14px}
+.mp-alert.bad{background:var(--bad-l);color:var(--bad)}
+.mp-alert.warn{background:var(--warn-l);color:var(--warn)}
+.mp-wall{fill:#fff;stroke:#9C9288;stroke-width:1.6;stroke-dasharray:3 6}
+.mp-fix{fill:#EEF2F1;stroke:#A8B5B3;stroke-width:1.5}
+.mp-fixl{stroke:#A8B5B3;stroke-width:1.5}
+.mp-door{fill:#F5EEE2;stroke:#BC955C;stroke-width:2}
+.mp-lbl{fill:#6F7C7A;font:600 13px Montserrat,sans-serif;text-anchor:middle}
+.mp-lbl.big{font-size:20px;fill:#B8C2C0;paint-order:stroke;stroke:#fff;stroke-width:6px;letter-spacing:2px}
+.mp-lbl.in{fill:var(--guinda);font-size:15px;font-weight:800}
+.mp-ran{fill:#DDE2E1;font:800 46px Montserrat,sans-serif;text-anchor:middle;letter-spacing:14px}
+.mp-ch{fill:#F3EEE6;stroke:#CFC6BA;stroke-width:1.2}
+.mp-body{fill:#fff;stroke:#B9AE9F;stroke-width:2}
+.mp-t{cursor:pointer}
+.mp-t:hover .mp-body{stroke:var(--guinda2);stroke-width:3}
+.mp-t:focus{outline:none}
+.mp-t:focus-visible .mp-body{stroke:var(--guinda2);stroke-width:4}
+.mp-t.over .mp-body{stroke:var(--bad);stroke-width:3.5}
+.mp-t.hit .mp-body{stroke:#E0A100;stroke-width:5}
+.mp-wrap.q .mp-t:not(.hit){opacity:.35}
+.mp-n{font:800 24px Montserrat,sans-serif;text-anchor:middle;fill:#1E1915}
+.mp-a{font-family:'Noto Sans',system-ui,sans-serif;font-weight:700;text-anchor:middle;fill:#4A1426}
+.mp-a.der{font-style:italic;font-weight:500;fill:#6A615A}
+.mp-c{font:600 11px 'Noto Sans',system-ui,sans-serif;text-anchor:middle;fill:#5A5149}
+.modal{position:fixed;inset:0;background:rgba(30,25,21,.45);z-index:60;display:flex;align-items:flex-end;justify-content:center}
+.modal[hidden]{display:none}
+.modal .sheet{background:#fff;width:min(580px,100%);max-height:88vh;overflow:auto;border-radius:18px 18px 0 0;padding:18px 18px 22px}
+@media (min-width:700px){.modal{align-items:center;padding:20px}.modal .sheet{border-radius:18px}}
+#tmList .mesa-list{grid-template-columns:1fr}
+</style>
 </head>
 <body>
 
@@ -176,6 +218,7 @@ body.setup .tabs{visibility:hidden}
   <nav class="tabs" role="tablist">
     <button class="tab" role="tab" data-tab="recepcion" aria-selected="true">Recepción</button>
     <button class="tab" role="tab" data-tab="mesas" aria-selected="false">Mesas</button>
+    <button class="tab" role="tab" data-tab="mapa" aria-selected="false">Mapa</button>
     <button class="tab" role="tab" data-tab="preparar" aria-selected="false">Preparar lista</button>
   </nav>
 </header>
@@ -184,12 +227,12 @@ body.setup .tabs{visibility:hidden}
   <section id="v-conectar" hidden>
     <div class="card" style="max-width:520px;margin:24px auto">
       <h2 class="sec">Conectar con la lista de invitados</h2>
-      <p class="sec-d">Escribe la clave que te dieron. Si abriste el link de la puerta, esto no debería aparecer.</p>
+      <p class="sec-d">Escribe tu contraseña para entrar. Con la de administrador preparas la lista y el mapa; con la de puerta solo se registran llegadas.</p>
       <form id="cForm" class="stack" style="gap:12px">
         <label class="field" id="cUrlWrap">URL del Apps Script (termina en /exec)
           <input class="inp" id="cUrl" placeholder="https://script.google.com/macros/s/…/exec" autocomplete="off">
         </label>
-        <label class="field">Clave
+        <label class="field">Contraseña
           <input class="inp" id="cKey" type="password" autocomplete="current-password">
         </label>
         <div class="row"><button class="btn primary" type="submit">Conectar</button><button class="btn ghost" type="button" id="cLocal">Usar sin conexión (solo este dispositivo)</button></div>
@@ -207,6 +250,20 @@ body.setup .tabs{visibility:hidden}
       <label class="muted" style="font-size:14px;display:flex;gap:6px;align-items:center"><input type="checkbox" id="mOnlyPending"> Solo mesas con pendientes</label>
     </div>
     <div class="mesas" id="mGrid"></div>
+  </section>
+
+  <section id="v-mapa" hidden>
+    <div class="stats" id="mpStats"></div>
+    <div id="mpMsg"></div>
+    <div class="toolbar">
+      <input class="inp" id="mpQ" placeholder="Buscar invitado para ver su mesa…" style="flex:1;min-width:200px" autocomplete="off">
+      <div class="seg" id="mpMode"><button data-m="asig" class="on">Asignación</button><button data-m="lleg">Llegadas</button></div>
+      <label class="muted" id="mpSeatsW" style="font-size:14px;display:flex;gap:6px;align-items:center">Lugares por mesa <select class="inp" id="mpSeats" style="padding:7px 9px"></select></label>
+      <div class="seg"><button id="mpZm" title="Alejar" aria-label="Alejar">−</button><button id="mpZp" title="Acercar" aria-label="Acercar">+</button><button id="mpZf">Ajustar</button></div>
+    </div>
+    <div id="mpHits" class="mp-hits"></div>
+    <div class="mp-wrap" id="mpWrap"></div>
+    <div class="mp-legend" id="mpLegend"></div>
   </section>
 
   <section id="v-preparar" hidden>
@@ -298,6 +355,17 @@ body.setup .tabs{visibility:hidden}
 </main>
 
 <datalist id="areasList"></datalist>
+<div class="modal" id="tmModal" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="tmTitle">
+    <div class="row" style="justify-content:space-between;align-items:center;margin-bottom:4px">
+      <h2 class="sec" id="tmTitle" style="margin:0;font-size:22px">Mesa</h2>
+      <button class="btn ghost" id="tmClose">Cerrar</button>
+    </div>
+    <div class="muted" id="tmStats" style="font-size:14px;margin-bottom:14px"></div>
+    <div id="tmForm"></div>
+    <div id="tmList"></div>
+  </div>
+</div>
 <div class="toast" id="toast" hidden></div>
 
 <!-- ===================== CORE (shared with the offline kit) ===================== -->
@@ -595,14 +663,39 @@ function toCSV(rows){
 <!-- ===================== APP ===================== -->
 <script>
 /* ====== CONFIGURACIÓN ======
-   Pega aquí la URL de tu Apps Script (la que termina en /exec).
-   Si la dejas vacía, la página la pide al abrirse. */
-var API_URL = '';
+   URL del Apps Script (la que termina en /exec). Con la URL puesta aquí, la
+   página solo pide la contraseña. Si la dejas vacía, también pide la URL. */
+var API_URL = 'https://script.google.com/macros/s/AKfycbzbEK84zUJHAp537URSqksy93x3lhvBLN_bqnaV72cY0OX9wFJYoYNXEglsKcRESSPLcg/exec';
 
 (function(){
   var $ = function(s){ return document.querySelector(s); };
+  /* Plano del salón: posición fija de cada una de las 23 mesas.
+     k = forma: sq cuadrada · rh rectangular horizontal · rv rectangular vertical · big mesa larga */
+  var PLAN = [
+    {s:1,k:'sq',x:432,y:466},{s:2,k:'rv',x:432,y:332},{s:3,k:'sq',x:432,y:200},
+    {s:4,k:'rh',x:268,y:470},{s:5,k:'sq',x:268,y:368},{s:6,k:'rh',x:268,y:266},{s:7,k:'sq',x:268,y:166},
+    {s:8,k:'sq',x:118,y:466},{s:9,k:'rh',x:118,y:368},{s:10,k:'sq',x:118,y:270},{s:11,k:'rh',x:118,y:170},
+    {s:12,k:'sq',x:796,y:468},{s:13,k:'rv',x:796,y:334},{s:14,k:'sq',x:796,y:206},
+    {s:15,k:'sq',x:960,y:554},{s:16,k:'rh',x:960,y:454},{s:17,k:'big',x:960,y:324},{s:18,k:'rh',x:960,y:192},{s:19,k:'sq',x:960,y:94},
+    {s:20,k:'sq',x:1120,y:494},{s:21,k:'rh',x:1120,y:392},{s:22,k:'sq',x:1120,y:292},{s:23,k:'rh',x:1120,y:190}
+  ];
+  var DIM = { sq: [64, 64], rh: [96, 58], rv: [58, 96], big: [66, 124] };
+  function defaultMapa(){ var t = {}; PLAN.forEach(function(p){ t[p.s] = { n: p.s, a: '' }; }); return { t: t }; }
+  function normMapa(m){
+    var out = defaultMapa(), src = (m && m.t) || {}, used = {}, bad = [];
+    PLAN.forEach(function(p){
+      var e = src[p.s], n = e ? Math.floor(Number(e.n)) : p.s;
+      if (e) out.t[p.s].a = String(e.a || '').slice(0, 60);
+      if (n > 0 && n < 1000 && !used[n]){ used[n] = 1; out.t[p.s].n = n; } else bad.push(p.s);
+    });
+    bad.forEach(function(s){ var n = 1; while (used[n]) n++; used[n] = 1; out.t[s].n = n; });
+    return out;
+  }
   var S = { mode: 'loading', role: null, roster: { title: '', seats: 10, guests: {} }, arrivals: {}, G: [], idx: [], preview: null, openMesa: null, sheetUrl: '', puertaKey: '' };
   var tab = 'recepcion', rc = null, listDirty = false;
+  var mpMode = 'asig', mpZoom = 1;
+  S.mapa = defaultMapa(); S.mapaSync = null; S.tm = null;
+  try { var lm = JSON.parse(localStorage.getItem('ranf_mapa') || 'null'); if (lm) S.mapa = normMapa(lm); } catch(e){}
   var device = lsGet('ranf_device') || '';
   var apiUrl = API_URL || lsGet('ranf_api') || '';
   var key = lsGet('ranf_key') || '';
@@ -658,6 +751,8 @@ var API_URL = '';
     (r.guests || []).forEach(function(x){ g[x.id] = { n: x.n, a: x.a, m: x.m, o: x.o, w: x.w }; });
     setRoster({ title: r.title, seats: r.seats, guests: g });
     S.arrivals = r.arrivals || {};
+    if ('mapa' in r){ S.mapaSync = true; if (r.mapa){ S.mapa = normMapa(r.mapa); lsSet('ranf_mapa', JSON.stringify(S.mapa)); } }
+    else if (S.mapaSync === null) S.mapaSync = false;
     if (prevRole !== S.role) applyRole();
     renderAll();
   }
@@ -696,7 +791,7 @@ var API_URL = '';
   }
 
   /* ---------- Operaciones (optimistas: se ven al instante y se guardan detrás) ---------- */
-  function saveLocal(){ if (S.mode === 'local') lsSet('ranf_data', JSON.stringify({ roster: S.roster, arrivals: S.arrivals })); }
+  function saveLocal(){ if (S.mode === 'local') lsSet('ranf_data', JSON.stringify({ roster: S.roster, arrivals: S.arrivals, mapa: S.mapa })); }
   function applyPatch(map){
     var g = Object.assign({}, S.roster.guests);
     Object.keys(map).forEach(function(k){ g[k] = map[k] === null ? null : Object.assign({}, g[k] || {}, map[k]); });
@@ -728,22 +823,22 @@ var API_URL = '';
   }
   function clearArrivals(){ S.arrivals = {}; afterArrivals(); saveLocal(); if (rc) rc.refresh(); send({ action: 'clearArrivals' }).then(function(){ toast('Registro de llegadas borrado.'); }); }
   function clearAll(){ setRoster({ title: S.roster.title, seats: S.roster.seats, guests: {} }); S.arrivals = {}; renderAll(); saveLocal(); send({ action: 'clearAll' }); }
-  function afterArrivals(){ renderHeader(); if (tab === 'mesas') renderMesas(); if (tab === 'preparar') renderList(); }
+  function afterArrivals(){ renderHeader(); if (tab === 'mesas') renderMesas(); if (tab === 'mapa') renderMapa(); if (tab === 'preparar') renderList(); renderTmHead(); renderTmList(); }
 
   /* ---------- Conexión ---------- */
   function showConnect(msg){
     S.mode = 'setup'; clearTimeout(pollTimer);
     document.body.classList.add('setup');
     $('#v-conectar').hidden = false;
-    ['recepcion', 'mesas', 'preparar'].forEach(function(v){ $('#v-' + v).hidden = true; });
-    $('#cUrlWrap').hidden = !!API_URL;
+    ['recepcion', 'mesas', 'mapa', 'preparar'].forEach(function(v){ $('#v-' + v).hidden = true; });
+    $('#cUrlWrap').hidden = !!API_URL; $('#cLocal').hidden = !!API_URL;
     $('#cUrl').value = apiUrl; $('#cKey').value = '';
     $('#cMsg').textContent = msg || '';
     renderHeader();
     setTimeout(function(){ (API_URL ? $('#cKey') : $('#cUrl')).focus(); }, 50);
   }
   function hideConnect(){ document.body.classList.remove('setup'); $('#v-conectar').hidden = true; showTab(tab); }
-  function badKey(){ lsDel('ranf_key'); key = ''; showConnect('La clave no es válida. Pídesela a quien organiza el registro.'); }
+  function badKey(){ lsDel('ranf_key'); key = ''; showConnect('La contraseña no es válida. Pídesela a quien organiza el registro.'); }
   function connect(){
     if (!apiUrl || !key){ showConnect(''); return; }
     S.mode = 'connecting'; renderHeader();
@@ -756,7 +851,7 @@ var API_URL = '';
   }
   function startLocal(){
     S.mode = 'local'; S.role = 'admin'; lsSet('ranf_mode', 'local');
-    try { var d = JSON.parse(lsGet('ranf_data') || 'null'); if (d){ setRoster(d.roster); S.arrivals = d.arrivals || {}; } } catch(e){}
+    try { var d = JSON.parse(lsGet('ranf_data') || 'null'); if (d){ setRoster(d.roster); S.arrivals = d.arrivals || {}; if (d.mapa) S.mapa = normMapa(d.mapa); } } catch(e){}
     hideConnect(); applyRole(); renderAll();
   }
   function applyRole(){
@@ -786,7 +881,9 @@ var API_URL = '';
     renderHeader();
     if (rc) rc.refresh();
     if (tab === 'mesas') renderMesas();
+    if (tab === 'mapa') renderMapa();
     if (tab === 'preparar') renderPrepare();
+    renderTmHead(); renderTmList();
   }
 
   /* Mesas */
@@ -1019,8 +1116,9 @@ var API_URL = '';
   function showTab(name){
     tab = name;
     document.querySelectorAll('.tab').forEach(function(x){ x.setAttribute('aria-selected', x.getAttribute('data-tab') === tab ? 'true' : 'false'); });
-    ['recepcion', 'mesas', 'preparar'].forEach(function(v){ $('#v-' + v).hidden = v !== tab || S.mode === 'setup'; });
+    ['recepcion', 'mesas', 'mapa', 'preparar'].forEach(function(v){ $('#v-' + v).hidden = v !== tab || S.mode === 'setup'; });
     if (tab === 'mesas') renderMesas();
+    if (tab === 'mapa') renderMapa();
     if (tab === 'preparar') renderPrepare();
     if (tab === 'recepcion' && rc){ rc.refresh(); rc.focus(); }
   }
@@ -1103,6 +1201,213 @@ var API_URL = '';
     if (e.target.id === 'xLogout'){ lsDel('ranf_key'); lsDel('ranf_mode'); key = ''; S.role = null; showConnect(''); }
   });
 
+  /* ---------- Mapa del salón ---------- */
+  function chairs(k, w, h){
+    var c = [], g = 9;
+    function add(x, y, cw, ch){ c.push('<rect class="mp-ch" x="' + (x - cw / 2) + '" y="' + (y - ch / 2) + '" width="' + cw + '" height="' + ch + '" rx="4"/>'); }
+    function top(o){ add(o, -(h / 2 + g), 17, 11); add(o, h / 2 + g, 17, 11); }
+    function side(o){ add(-(w / 2 + g), o, 11, 17); add(w / 2 + g, o, 11, 17); }
+    if (k === 'sq'){ [-17, 17].forEach(function(o){ top(o); side(o); }); }
+    else if (k === 'rh'){ [-30, 0, 30].forEach(top); side(0); }
+    else if (k === 'rv'){ [-30, 0, 30].forEach(side); top(0); }
+    else { [-48, -24, 0, 24, 48].forEach(side); top(0); }
+    return c.join('');
+  }
+  function fit(label, maxW){
+    var fs = 11;
+    while (fs > 8 && label.length * fs * 0.58 > maxW) fs -= 0.5;
+    var maxCh = Math.floor(maxW / (fs * 0.58));
+    if (label.length > maxCh) label = label.slice(0, Math.max(1, maxCh - 1)).trim() + '…';
+    return { t: label, fs: fs };
+  }
+  function derivedArea(list){
+    var c = {}; list.forEach(function(g){ if (g.a) c[g.a] = (c[g.a] || 0) + 1; });
+    var k = Object.keys(c).sort(function(a, b){ return c[b] - c[a] || a.localeCompare(b, 'es'); });
+    return k.length ? k[0] + (k.length > 1 ? ' +' + (k.length - 1) : '') : '';
+  }
+  function guestsByNum(){
+    var b = {};
+    S.G.forEach(function(g){ if (g.m !== null) (b[g.m] = b[g.m] || []).push(g); });
+    return b;
+  }
+  function slotOfNum(n){
+    for (var i = 0; i < PLAN.length; i++) if (S.mapa.t[PLAN[i].s].n === Number(n)) return PLAN[i].s;
+    return null;
+  }
+  function bgSvg(){
+    var o = [];
+    o.push('<rect class="mp-wall" x="16" y="30" width="1208" height="590" rx="6"/>');
+    o.push('<line x1="860" y1="30" x2="860" y2="620" stroke="#E2B100" stroke-width="7"/>');
+    o.push('<line x1="860" y1="30" x2="860" y2="620" stroke="#2A221D" stroke-width="7" stroke-dasharray="9 9"/>');
+    o.push('<rect class="mp-fix" x="460" y="40" width="324" height="68" rx="6"/><line class="mp-fixl" x1="460" y1="72" x2="784" y2="72"/>');
+    o.push('<text class="mp-lbl" x="622" y="61">pantalla</text><text class="mp-lbl" x="622" y="96">escenario</text>');
+    o.push('<rect class="mp-fix" x="798" y="52" width="46" height="40" rx="8"/><text class="mp-lbl" x="821" y="77">DJ</text>');
+    o.push('<text class="mp-ran" x="630" y="150">RAN</text>');
+    o.push('<rect class="mp-fix" x="500" y="164" width="232" height="308"/>');
+    for (var i = 1; i < 4; i++) o.push('<line class="mp-fixl" x1="' + (500 + i * 58) + '" y1="164" x2="' + (500 + i * 58) + '" y2="472"/>');
+    for (var j = 1; j < 7; j++) o.push('<line class="mp-fixl" x1="500" y1="' + (164 + j * 44) + '" x2="732" y2="' + (164 + j * 44) + '"/>');
+    o.push('<text class="mp-lbl big" x="616" y="326">pista de baile</text>');
+    function room(x, y, w, h, t, cls){
+      o.push('<rect class="' + (cls || 'mp-fix') + '" x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="8"/><text class="mp-lbl' + (cls ? ' in' : '') + '" x="' + (x + w / 2) + '" y="' + (y + h / 2 + 5) + '">' + t + '</text>');
+    }
+    room(16, 648, 96, 56, 'WC ♂'); room(170, 648, 112, 56, 'Cocina');
+    room(380, 640, 140, 70, 'ENTRADA', 'mp-door'); room(600, 648, 112, 56, 'Guardarropa');
+    room(930, 648, 96, 56, 'WC ♀'); room(1100, 648, 108, 56, 'Puerta');
+    o.push('<path d="M450 622 l-9 14 h18 z" fill="#BC955C"/>');
+    return o.join('');
+  }
+  var BG = bgSvg();
+
+  function renderMapa(){
+    var wrap = $('#mpWrap'), by = guestsByNum(), seats = S.roster.seats, adm = isAdmin();
+    var qv = $('#mpQ').value, hitNums = {}, hits = [];
+    if (norm(qv)){ hits = searchGuests(S.idx, qv, 12).hits; hits.forEach(function(o){ if (o.g.m !== null) hitNums[o.g.m] = 1; }); }
+    wrap.classList.toggle('q', hits.length > 0);
+
+    var onPlan = {}; PLAN.forEach(function(p){ onPlan[S.mapa.t[p.s].n] = 1; });
+    var G = S.G.length, cap = PLAN.length * seats, placed = 0, none = 0, off = 0, offN = {};
+    S.G.forEach(function(g){ if (g.m === null) none++; else if (onPlan[g.m]) placed++; else { off++; offN[g.m] = 1; } });
+    $('#mpStats').innerHTML =
+      '<div class="stat"><b>' + G + '</b><span>invitados</span></div>' +
+      '<div class="stat"><b>' + cap + '</b><span>lugares · ' + PLAN.length + ' mesas × ' + seats + '</span></div>' +
+      '<div class="stat"><b>' + placed + '</b><span>sentados en el plano</span></div>' +
+      '<div class="stat"><b>' + none + '</b><span>sin mesa</span></div>' +
+      '<div class="stat"><b>' + arrivedCount() + '</b><span>ya llegaron</span></div>';
+    var al = '';
+    if (G > cap) al += '<div class="mp-alert bad"><b>Faltan ' + (G - cap) + ' lugares.</b> Hay ' + G + ' invitados y el plano tiene capacidad para ' + cap + ' (' + PLAN.length + ' mesas × ' + seats + ').' + (seats < 12 ? ' Con 12 por mesa el máximo es ' + (PLAN.length * 12) + '.' : '') + '</div>';
+    if (off) al += '<div class="mp-alert warn">' + off + ' invitados tienen una mesa que no existe en el plano (' + Object.keys(offN).sort(function(a, b){ return a - b; }).join(', ') + '). Cambia el número de alguna mesa o reasígnalos en “Preparar lista”.</div>';
+    if (adm && S.mode === 'api' && S.mapaSync === false) al += '<div class="mp-alert warn">El Apps Script todavía no guarda el mapa: pega la versión nueva de Code.gs y vuelve a implementar. Mientras tanto, los cambios del mapa solo se ven en este dispositivo.</div>';
+    $('#mpMsg').innerHTML = al;
+
+    var sel = $('#mpSeats'), opts = [10, 11, 12];
+    if (opts.indexOf(seats) < 0){ opts.push(seats); opts.sort(function(a, b){ return a - b; }); }
+    if (document.activeElement !== sel) sel.innerHTML = opts.map(function(v){ return '<option' + (v === seats ? ' selected' : '') + '>' + v + '</option>'; }).join('');
+    $('#mpSeatsW').hidden = !adm;
+
+    $('#mpHits').innerHTML = !norm(qv) ? '' : (hits.length ? hits.slice(0, 6).map(function(o){
+      var sl = o.g.m === null ? null : slotOfNum(o.g.m);
+      return '<button class="chip"' + (sl ? ' data-slot="' + sl + '"' : '') + '>' + esc(o.g.n) + ' → ' + (o.g.m === null ? 'sin mesa' : 'Mesa ' + esc(o.g.m)) + '</button>';
+    }).join('') : '<span class="muted" style="font-size:14px">Sin resultados.</span>');
+
+    var s = ['<svg class="mp-svg" id="mpSvg" viewBox="0 0 1240 730" xmlns="http://www.w3.org/2000/svg" role="group" aria-label="Plano del salón con ' + PLAN.length + ' mesas">', BG];
+    PLAN.forEach(function(p){
+      var e = S.mapa.t[p.s], n = e.n, list = by[n] || [], cnt = list.length;
+      var arr = list.filter(function(g){ return S.arrivals[g.id]; }).length;
+      var d = DIM[p.k], w = d[0], h = d[1], manual = e.a, shown = manual || derivedArea(list);
+      var fill;
+      if (mpMode === 'asig'){
+        fill = cnt ? 'rgba(188,149,92,' + (0.16 + 0.5 * Math.min(1, cnt / seats)).toFixed(2) + ')' : '#fff';
+        if (cnt > seats) fill = '#FDECEA';
+      } else fill = cnt ? 'rgba(23,120,74,' + (0.10 + 0.6 * (arr / cnt)).toFixed(2) + ')' : '#fff';
+      var f = fit(shown, w - 8);
+      var cText = mpMode === 'asig' ? (cnt + '/' + seats) : ('✓ ' + arr + '/' + cnt);
+      s.push('<g class="mp-t' + (cnt > seats ? ' over' : '') + (hitNums[n] ? ' hit' : '') + '" data-slot="' + p.s + '" transform="translate(' + p.x + ',' + p.y + ')" tabindex="0" role="button" aria-label="Mesa ' + n + (shown ? ', ' + esc(shown) : '') + ', ' + cnt + ' invitados">' +
+        '<title>Mesa ' + n + (shown ? ' · ' + esc(shown) : '') + ' · ' + cnt + ' invitados, ' + arr + ' llegaron</title>' +
+        chairs(p.k, w, h) +
+        '<rect class="mp-body" x="' + (-w / 2) + '" y="' + (-h / 2) + '" width="' + w + '" height="' + h + '" rx="10" style="fill:' + fill + '"/>' +
+        '<text class="mp-n" y="-6">' + n + '</text>' +
+        (shown ? '<text class="mp-a' + (manual ? '' : ' der') + '" y="8" style="font-size:' + f.fs + 'px">' + esc(f.t) + '</text>'
+               : (adm ? '<text class="mp-a der" y="8" style="font-size:10px;opacity:.55">+ área</text>' : '')) +
+        '<text class="mp-c" y="23">' + cText + '</text></g>');
+    });
+    s.push('</svg>');
+    var sl = wrap.scrollLeft, st = wrap.scrollTop;
+    wrap.innerHTML = s.join('');
+    $('#mpSvg').style.width = Math.round(Math.max(wrap.clientWidth - 18, 900) * mpZoom) + 'px';
+    wrap.scrollLeft = sl; wrap.scrollTop = st;
+
+    $('#mpLegend').innerHTML = (mpMode === 'asig'
+      ? '<span><i style="background:#fff"></i>Sin invitados</span><span><i style="background:rgba(188,149,92,.4)"></i>Con invitados</span><span><i style="background:rgba(188,149,92,.66)"></i>Llena</span><span><i style="background:#FDECEA;border-color:#B42318"></i>Sobrecupo</span>'
+      : '<span><i style="background:#fff"></i>Nadie ha llegado</span><span><i style="background:rgba(23,120,74,.4)"></i>Van llegando</span><span><i style="background:rgba(23,120,74,.7)"></i>Mesa completa</span>') +
+      '<span>' + (adm ? 'Toca una mesa para cambiar su número o su área.' : 'Toca una mesa para ver sus invitados.') + '</span>';
+  }
+
+  function renderTmHead(){
+    if (S.tm === null) return;
+    var e = S.mapa.t[S.tm], list = guestsByNum()[e.n] || [], arr = list.filter(function(g){ return S.arrivals[g.id]; }).length, area = e.a || derivedArea(list);
+    $('#tmTitle').textContent = 'Mesa ' + e.n;
+    $('#tmStats').textContent = (area ? area + ' · ' : '') + list.length + '/' + S.roster.seats + ' lugares · ' + arr + ' llegaron';
+  }
+  function renderTmList(){
+    if (S.tm === null) return;
+    var e = S.mapa.t[S.tm], list = (guestsByNum()[e.n] || []).slice().sort(function(a, b){ return a.n.localeCompare(b.n, 'es'); });
+    $('#tmList').innerHTML = list.length ? '<div class="mesa-list">' + list.map(function(g){
+      var a = S.arrivals[g.id];
+      return '<div class="mini"><button class="chk' + (a ? ' on' : '') + '" data-act="' + (a ? 'undo' : 'arrive') + '" data-id="' + esc(g.id) + '" title="' + (a ? 'Deshacer llegada' : 'Registrar llegada') + '">' + (a ? '✓' : '') + '</button>' +
+        '<div class="nm">' + esc(g.n) + '<small>' + esc(g.a || 'Sin área') + (a && a.t ? ' · ' + fmtTime(a.t) : '') + '</small></div></div>';
+    }).join('') + '</div>' : '<div class="empty" style="padding:18px"><b>Mesa sin invitados</b>Asígnalos en “Preparar lista”.</div>';
+  }
+  function openTable(slot){
+    if (!S.mapa.t[slot]) return;
+    S.tm = slot;
+    var e = S.mapa.t[slot], list = guestsByNum()[e.n] || [];
+    $('#tmModal').hidden = false;
+    $('#tmForm').innerHTML = isAdmin()
+      ? '<div class="row"><label class="field" style="flex:0 0 120px">Número de mesa<input class="inp" id="tmNum" type="number" min="1" max="99" inputmode="numeric" value="' + e.n + '"></label>' +
+        '<label class="field" style="flex:1;min-width:160px">Área que la ocupa<input class="inp" id="tmArea" list="areasList" maxlength="60" value="' + esc(e.a) + '" placeholder="' + esc(derivedArea(list) || 'Ej. AGA') + '"></label>' +
+        '<button class="btn primary" id="tmSave">Guardar</button></div>' +
+        '<p class="sec-d" style="margin:8px 0 14px">Si cambias el número, los invitados de esta mesa se mueven con ella; si ese número ya lo tiene otra mesa, las dos se intercambian. Si dejas el área vacía se muestra la de sus invitados.</p>'
+      : '';
+    renderTmHead(); renderTmList();
+  }
+  function closeTable(){ S.tm = null; $('#tmModal').hidden = true; }
+  function saveMapa(){
+    lsSet('ranf_mapa', JSON.stringify(S.mapa)); saveLocal();
+    return send({ action: 'config', mapa: S.mapa });
+  }
+  function saveTable(){
+    var slot = S.tm; if (slot === null || !isAdmin()) return;
+    var num = Math.floor(Number($('#tmNum').value)), area = $('#tmArea').value.replace(/\s+/g, ' ').trim().slice(0, 60);
+    if (!(num >= 1 && num <= 99)){ toast('El número de mesa debe estar entre 1 y 99.'); return; }
+    var t = JSON.parse(JSON.stringify(S.mapa.t)), old = t[slot].n, map = {}, msg = 'Mesa ' + old + ' actualizada.', other = null;
+    PLAN.forEach(function(p){ if (p.s !== slot && t[p.s].n === num) other = p.s; });
+    if (num !== old){
+      if (other === null && S.G.some(function(g){ return g.m === num; })){ toast('La mesa ' + num + ' tiene invitados pero no está en el plano. Elige otro número.'); return; }
+      S.G.forEach(function(g){
+        if (g.m === old) map[g.id] = { m: num };
+        else if (other !== null && g.m === num) map[g.id] = { m: old };
+      });
+      if (other !== null){ t[other].n = old; msg = 'Mesas ' + old + ' y ' + num + ' intercambiadas.'; }
+      else msg = 'La mesa ' + old + ' ahora es la ' + num + '.';
+      t[slot].n = num;
+    }
+    t[slot].a = area;
+    S.mapa = { t: t };
+    closeTable();
+    if (Object.keys(map).length) patchGuests(map); else renderAll();
+    saveMapa();
+    toast(msg);
+  }
+
+  $('#mpQ').addEventListener('input', renderMapa);
+  $('#mpMode').addEventListener('click', function(e){
+    var b = e.target.closest('button[data-m]'); if (!b) return;
+    mpMode = b.getAttribute('data-m');
+    this.querySelectorAll('button').forEach(function(x){ x.classList.toggle('on', x === b); });
+    renderMapa();
+  });
+  $('#mpSeats').addEventListener('change', function(e){ var v = Number(e.target.value); if (v > 0) patchMeta({ seats: v }); });
+  $('#mpZm').addEventListener('click', function(){ mpZoom = Math.max(0.6, +(mpZoom - 0.2).toFixed(2)); renderMapa(); });
+  $('#mpZp').addEventListener('click', function(){ mpZoom = Math.min(2.4, +(mpZoom + 0.2).toFixed(2)); renderMapa(); });
+  $('#mpZf').addEventListener('click', function(){ mpZoom = 1; renderMapa(); });
+  $('#mpWrap').addEventListener('click', function(e){ var g = e.target.closest('.mp-t'); if (g) openTable(Number(g.getAttribute('data-slot'))); });
+  $('#mpWrap').addEventListener('keydown', function(e){
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    var g = e.target.closest && e.target.closest('.mp-t'); if (!g) return;
+    e.preventDefault(); openTable(Number(g.getAttribute('data-slot')));
+  });
+  $('#mpHits').addEventListener('click', function(e){ var b = e.target.closest('[data-slot]'); if (b) openTable(Number(b.getAttribute('data-slot'))); });
+  $('#tmModal').addEventListener('click', function(e){
+    if (e.target.id === 'tmModal' || e.target.id === 'tmClose'){ closeTable(); return; }
+    if (e.target.id === 'tmSave'){ saveTable(); return; }
+    var b = e.target.closest('[data-act]'); if (!b) return;
+    if (b.getAttribute('data-act') === 'arrive') arrive(b.getAttribute('data-id'));
+    else if (b.getAttribute('data-act') === 'undo') unarrive(b.getAttribute('data-id'));
+  });
+  $('#tmModal').addEventListener('keydown', function(e){ if (e.key === 'Enter' && (e.target.id === 'tmNum' || e.target.id === 'tmArea')){ e.preventDefault(); saveTable(); } });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && S.tm !== null) closeTable(); });
+  window.addEventListener('resize', function(){ if (tab === 'mapa') renderMapa(); });
+
   rc = mountReception($('#v-recepcion'), {
     guests: function(){ return S.G; },
     index: function(){ return S.idx; },
@@ -1111,7 +1416,7 @@ var API_URL = '';
     suggestTable: function(){ return suggestTableFor(S.G, S.roster.seats); }
   });
   renderHeader();
-  if (lsGet('ranf_mode') === 'local' && !key) startLocal(); else connect();
+  if (!API_URL && lsGet('ranf_mode') === 'local' && !key) startLocal(); else connect();
 })();
 </script>
 </body>
