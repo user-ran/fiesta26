@@ -214,6 +214,7 @@ body.setup .tabs{visibility:hidden}
     </div>
     <div class="counter"><b id="hIn">0</b><span>de <span id="hTot">0</span> han llegado</span></div>
     <span class="pill" id="hStatus"><i></i><span>Conectando…</span></span>
+    <button class="pill" id="hLogout" hidden style="border:0;color:#fff;cursor:pointer;font-weight:600">Cerrar sesión</button>
   </div>
   <nav class="tabs" role="tablist">
     <button class="tab" role="tab" data-tab="recepcion" aria-selected="true">Recepción</button>
@@ -838,6 +839,11 @@ var API_URL = 'https://script.google.com/macros/s/AKfycbzbEK84zUJHAp537URSqksy93
     setTimeout(function(){ (API_URL ? $('#cKey') : $('#cUrl')).focus(); }, 50);
   }
   function hideConnect(){ document.body.classList.remove('setup'); $('#v-conectar').hidden = true; showTab(tab); }
+  function logout(){
+    lsDel('ranf_key'); lsDel('ranf_mode'); key = ''; S.role = null; S.sheetUrl = ''; S.puertaKey = '';
+    S.tm = null; $('#tmModal').hidden = true; lastV = '';
+    showConnect('');
+  }
   function badKey(){ lsDel('ranf_key'); key = ''; showConnect('La contraseña no es válida. Pídesela a quien organiza el registro.'); }
   function connect(){
     if (!apiUrl || !key){ showConnect(''); return; }
@@ -873,6 +879,7 @@ var API_URL = 'https://script.google.com/macros/s/AKfycbzbEK84zUJHAp537URSqksy93
       loading: ['', 'Cargando…'], connecting: ['', 'Conectando…'], setup: ['warn', 'Sin conectar'],
       local: ['warn', 'Modo local: solo este dispositivo']
     }[S.mode] || ['', ''];
+    $('#hLogout').hidden = !(S.mode === 'api' || S.mode === 'local');
     var p = $('#hStatus'); p.className = 'pill ' + st[0]; p.querySelector('span').textContent = st[1];
     $('#areasList').innerHTML = areas().map(function(a){ return '<option value="' + esc(a) + '">'; }).join('');
   }
@@ -1133,6 +1140,7 @@ var API_URL = 'https://script.google.com/macros/s/AKfycbzbEK84zUJHAp537URSqksy93
     connect();
   });
   $('#cLocal').addEventListener('click', startLocal);
+  $('#hLogout').addEventListener('click', logout);
 
   $('#mFilter').addEventListener('input', renderMesas);
   $('#mOnlyPending').addEventListener('change', renderMesas);
@@ -1198,7 +1206,7 @@ var API_URL = 'https://script.google.com/macros/s/AKfycbzbEK84zUJHAp537URSqksy93
       var v = $('#xDoor').value;
       (navigator.clipboard ? navigator.clipboard.writeText(v) : Promise.reject()).then(function(){ toast('Link copiado.'); }, function(){ $('#xDoor').select(); });
     }
-    if (e.target.id === 'xLogout'){ lsDel('ranf_key'); lsDel('ranf_mode'); key = ''; S.role = null; showConnect(''); }
+    if (e.target.id === 'xLogout') logout();
   });
 
   /* ---------- Mapa del salón ---------- */
